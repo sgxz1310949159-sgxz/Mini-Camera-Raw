@@ -73,15 +73,19 @@ Local git has been initialized in this folder.
 
 本文件夹已经初始化为本地 git 仓库。
 
-Remote GitHub publication still needs one of these:
+Remote GitHub publication is configured:
 
-远端 GitHub 发布还需要满足以下条件之一：
+远端 GitHub 发布已经配置完成：
 
-- a GitHub repository URL created by the user, or
-- a working GitHub CLI flow that can create repositories.
+- repository: `sgxz1310949159-sgxz/Mini-Camera-Raw`
+- URL: <https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw>
+- visibility: `Public`
+- default branch: `main`
 
-- 用户先创建一个 GitHub 仓库并提供仓库 URL，或
-- 安装并登录可用的 GitHub CLI，让本机能执行建库流程。
+- 仓库：`sgxz1310949159-sgxz/Mini-Camera-Raw`
+- URL：<https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw>
+- 可见性：`Public`
+- 默认分支：`main`
 
 Current local status on 2026-07-06:
 
@@ -89,12 +93,14 @@ Current local status on 2026-07-06:
 
 - `gh` CLI is installed: version 2.96.0.
 - `gh` authentication is verified for `sgxz1310949159-sgxz`.
+- Local `origin` points to the GitHub repository above.
 - The available GitHub connector can work with existing repositories, issues,
   pull requests, branches, commits, and files, but no create-repository tool is
   currently exposed.
 
 - 当前环境已安装 `gh` CLI：版本 2.96.0。
 - `gh` 已验证登录到 `sgxz1310949159-sgxz`。
+- 本地 `origin` 已指向上述 GitHub 仓库。
 - 可用的 GitHub 插件可以操作已有仓库、issue、pull request、分支、commit 和文件，但目前没有暴露创建新仓库的工具。
 
 Recommended remote repository:
@@ -125,19 +131,19 @@ Do not add a `LICENSE` file until the author/copyright string is confirmed.
 
 在确认作者署名/版权字符串之前，暂不添加 `LICENSE` 文件。
 
-## Recommended `gh` Setup / 推荐的 `gh` 设置方式
+## `gh` Setup Record / `gh` 设置记录
 
-Install GitHub CLI with Homebrew:
+GitHub CLI was installed with Homebrew:
 
-使用 Homebrew 安装 GitHub CLI：
+GitHub CLI 已通过 Homebrew 安装：
 
 ```sh
 brew install gh
 ```
 
-Log in interactively:
+Login was completed interactively:
 
-交互式登录：
+登录已通过交互式方式完成：
 
 ```sh
 gh auth login
@@ -154,18 +160,17 @@ Authenticate Git with your GitHub credentials? Yes
 How would you like to authenticate GitHub CLI? Login with a web browser
 ```
 
-After login, verify:
+Verification command:
 
-登录后验证：
+验证命令：
 
 ```sh
 gh auth status
 ```
 
-After `gh` is installed and authenticated, this project can be published with a
-flow like:
+The repository was created and pushed with:
 
-安装并登录 `gh` 之后，本项目可以用类似下面的流程发布：
+仓库已使用下面的命令创建并推送：
 
 ```sh
 gh repo create Mini-Camera-Raw --public --source . --remote origin --push
