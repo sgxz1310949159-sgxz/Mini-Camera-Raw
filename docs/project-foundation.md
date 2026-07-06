@@ -1,14 +1,18 @@
-# Project Foundation
+# Project Foundation / 项目基础说明
 
-Date: 2026-07-06
+Date / 日期：2026-07-06
 
-## Positioning
+## Positioning / 项目定位
 
 Mini-Camera Raw is a learning-first engineering project. Its value comes from
 making the RAW processing pipeline visible, explainable, and testable rather
 than from matching every feature of a commercial RAW editor.
 
+Mini-Camera Raw 是一个学习优先的工程项目。它的价值不在于完整复刻商业 RAW 编辑器的所有功能，而在于把 RAW 处理流水线变得可观察、可解释、可测试。
+
 The core learning goal is to understand bottom-level image principles:
+
+核心学习目标是理解底层图像原理：
 
 - RAW sensor data, Bayer/CFA layout, black level, white level, and dynamic range
 - ISP pipeline order and why each stage exists
@@ -17,9 +21,18 @@ The core learning goal is to understand bottom-level image principles:
 - tone curves, histograms, exposure values, and clipping
 - later: local contrast, edge-preserving filters, multithreading, and GPU ideas
 
-## Working Loop
+- RAW 传感器数据、Bayer/CFA 排列、黑电平、白电平和动态范围
+- ISP 流水线顺序，以及每个阶段为什么存在
+- 线性光图像处理与非线性显示空间处理的区别
+- 色彩校正矩阵、工作色彩空间和 Gamma 编码
+- 影调曲线、直方图、曝光值和裁剪
+- 后续扩展：局部对比度、保边滤波、多线程和 GPU 思路
+
+## Working Loop / 工作闭环
 
 Each feature should follow the same loop:
+
+每个功能都应该遵循同一个闭环：
 
 1. Learn the principle.
 2. Write a short design note: input, output, formula, data range, edge cases.
@@ -27,16 +40,28 @@ Each feature should follow the same loop:
 4. Validate it with numeric tests and visual checks.
 5. Record what changed, what was learned, and what still looks wrong.
 
+1. 先学习原理。
+2. 写一份简短设计说明：输入、输出、公式、数据范围、边界情况。
+3. 实现最小但正确的 CPU 版本。
+4. 用数值测试和视觉检查进行验证。
+5. 记录改了什么、学到了什么、还有哪里看起来不对。
+
 This loop keeps the project from becoming a pile of experiments. It also turns
 the final repository into a portfolio artifact: code plus reasoning.
 
-## Roadmap
+这个闭环能防止项目变成零散实验堆，同时也会让最终仓库成为更有展示价值的作品：不仅有代码，也有推理和解释。
 
-### Stage 0: Engineering Baseline
+## Roadmap / 路线图
+
+### Stage 0: Engineering Baseline / 阶段零：工程底座
 
 Goal: create a durable project base before implementing image algorithms.
 
+目标：在实现图像算法之前，先创建一个能长期推进的工程基础。
+
 Outputs:
+
+产出：
 
 - public repository structure
 - MVP boundary and acceptance criteria
@@ -44,18 +69,35 @@ Outputs:
 - initial image data model
 - local-only learning workspace
 
+- 公开仓库结构
+- MVP 边界和验收标准
+- 初始 CMake 与测试计划
+- 初始图像数据模型
+- 本地学习工作区
+
 Learning focus:
+
+学习重点：
 
 - C++ project structure
 - image memory layout
 - bit depth and numeric ranges
 - basic testing strategy
 
-### Stage 1: RAW Ingestion and Basic ISP
+- C++ 项目结构
+- 图像内存布局
+- 位深和数值范围
+- 基础测试策略
+
+### Stage 1: RAW Ingestion and Basic ISP / 阶段一：RAW 读取与基础 ISP
 
 Goal: turn a RAW file into a viewable RGB image.
 
+目标：把 RAW 文件转换成一张可查看的 RGB 图像。
+
 Target pipeline:
+
+目标流水线：
 
 ```text
 RAW file
@@ -69,7 +111,21 @@ RAW file
 -> PNG/TIFF output
 ```
 
+```text
+RAW 文件
+-> LibRaw 解析
+-> Bayer/CFA 缓冲区
+-> 黑电平校正
+-> 白平衡
+-> 去马赛克
+-> 相机色彩空间到工作色彩空间转换
+-> Gamma/显示转换
+-> PNG/TIFF 输出
+```
+
 Learning focus:
+
+学习重点：
 
 - RAW versus JPEG
 - Bayer pattern and demosaicing
@@ -78,11 +134,22 @@ Learning focus:
 - color matrix conversion
 - why most adjustments should happen in linear space
 
-### Stage 2: Tone Engine and Temporary UI
+- RAW 与 JPEG 的区别
+- Bayer 排列和去马赛克
+- 黑电平/白电平归一化
+- 作为通道增益的白平衡
+- 色彩矩阵转换
+- 为什么多数调整应发生在线性空间
+
+### Stage 2: Tone Engine and Temporary UI / 阶段二：影调引擎与临时 UI
 
 Goal: add basic Camera Raw-style controls while keeping the core engine clean.
 
+目标：加入基础 Camera Raw 风格控制，同时保持核心引擎干净。
+
 Priority controls:
+
+优先控制项：
 
 - Exposure
 - Contrast
@@ -90,10 +157,20 @@ Priority controls:
 - Temperature / Tint
 - basic tone curve or gamma control
 
+- 曝光
+- 对比度
+- 黑场 / 白场
+- 色温 / 色调
+- 基础影调曲线或 Gamma 控制
+
 OpenCV highgui can be used as a temporary validation UI, but UI code must stay
 outside the core engine.
 
+OpenCV highgui 可以作为临时验证 UI，但 UI 代码必须留在核心引擎之外。
+
 Learning focus:
+
+学习重点：
 
 - EV exposure math
 - S-curves and contrast
@@ -101,12 +178,22 @@ Learning focus:
 - linear versus sRGB-space adjustment
 - parameter range design
 
-### Stage 3: Color and Local Light Control
+- EV 曝光数学
+- S 曲线和对比度
+- 直方图和裁剪
+- 线性空间调整与 sRGB 空间调整的区别
+- 参数范围设计
+
+### Stage 3: Color and Local Light Control / 阶段三：色彩与局部光影控制
 
 Goal: explore higher-level color and local tone algorithms without losing the
 project's explainable structure.
 
+目标：探索更高阶的色彩和局部影调算法，同时保持项目结构可解释。
+
 Candidate controls:
+
+候选控制项：
 
 - Saturation
 - Vibrance
@@ -114,7 +201,15 @@ Candidate controls:
 - simple HSL color mixer
 - simplified Shadows / Highlights
 
+- 饱和度
+- 鲜艳度
+- RGB 与 HSV/HSL 双向转换
+- 简化版 HSL 混色器
+- 简化版阴影 / 高光
+
 Learning focus:
+
+学习重点：
 
 - color model tradeoffs
 - saturation versus vibrance
@@ -122,11 +217,21 @@ Learning focus:
 - bilateral/guided filtering
 - low-frequency illumination and high-frequency detail
 
-### Stage 4: Performance and API Export
+- 色彩模型取舍
+- 饱和度与鲜艳度的区别
+- 亮度蒙版
+- 双边滤波 / 导向滤波
+- 低频光照结构与高频纹理细节
+
+### Stage 4: Performance and API Export / 阶段四：性能优化与 API 导出
 
 Goal: turn the correct CPU pipeline into a more serious engineering artifact.
 
+目标：把正确的 CPU 流水线变成更完整的工程作品。
+
 Priority order:
+
+优先顺序：
 
 1. stable single-threaded CPU version
 2. benchmark tooling
@@ -135,7 +240,16 @@ Priority order:
 5. dynamic library export
 6. Metal compute as an optional advanced extension
 
+1. 稳定的单线程 CPU 版本
+2. benchmark 工具
+3. OpenMP / 多线程循环
+4. 内存访问优化
+5. 动态库导出
+6. Metal Compute 作为可选高级扩展
+
 Learning focus:
+
+学习重点：
 
 - cache-friendly pixel traversal
 - memory bandwidth limits
@@ -143,13 +257,27 @@ Learning focus:
 - C API design and memory ownership
 - dynamic library packaging
 
-## Acceptance Categories
+- 缓存友好的像素遍历
+- 内存带宽限制
+- CPU 与 GPU 执行模型差异
+- C API 设计和内存所有权
+- 动态库打包
+
+## Acceptance Categories / 验收类别
 
 Every stage should be checked with five categories:
+
+每个阶段都应该用五类标准检查：
 
 - Functional: the feature runs end-to-end.
 - Numeric: formulas match expected values within a documented tolerance.
 - Visual: output has no obvious color cast, clipping, halo, or banding issue.
 - Performance: timing and memory measurements are recorded for fixed inputs.
 - Learning: the principle can be explained in the project notes.
+
+- 功能验收：功能能端到端跑通。
+- 数值验收：公式结果在记录好的容差范围内符合预期。
+- 视觉验收：输出没有明显偏色、裁剪、光晕或断层问题。
+- 性能验收：对固定输入记录耗时和内存测量结果。
+- 学习验收：能在项目笔记中解释对应原理。
 
