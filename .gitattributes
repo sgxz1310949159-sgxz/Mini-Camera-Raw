@@ -1,0 +1,19 @@
+* text=auto eol=lf
+
+*.docx binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.tif binary
+*.tiff binary
+*.ARW binary
+*.arw binary
+*.CR2 binary
+*.cr2 binary
+*.CR3 binary
+*.cr3 binary
+*.NEF binary
+*.nef binary
+*.DNG binary
+*.dng binary
+

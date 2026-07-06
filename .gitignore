@@ -1,0 +1,61 @@
+# macOS and editor state
+.DS_Store
+.vscode/
+.idea/
+
+# CMake and build outputs
+build/
+cmake-build-*/
+out/
+dist/
+CMakeFiles/
+CMakeCache.txt
+CTestTestfile.cmake
+Testing/
+compile_commands.json
+
+# Compiled artifacts
+*.a
+*.dylib
+*.so
+*.dll
+*.o
+*.obj
+*.exe
+*.app/
+
+# Logs, caches, and temporary files
+*.log
+*.tmp
+*.cache/
+.cache/
+
+# Local-only learning and planning materials
+/learning/
+/项目策划书.docx
+/*.docx
+
+# Private image data and generated renders
+/samples/raw/
+/samples/output/
+/samples/cache/
+/outputs/
+/reports/local/
+/benchmarks/results/
+*.ARW
+*.arw
+*.CR2
+*.cr2
+*.CR3
+*.cr3
+*.NEF
+*.nef
+*.RAF
+*.raf
+*.DNG
+*.dng
+*.ORF
+*.orf
+*.RW2
+*.rw2
+
