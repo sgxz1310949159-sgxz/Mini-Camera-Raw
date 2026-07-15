@@ -32,7 +32,7 @@ Status / 状态：Active / 进行中
 - [ ] Add the owned image-buffer model and invariant tests.
 - [x] Add a CLI smoke path.
 - [x] Add the Linux CI workflow.
-- [ ] Confirm Linux CI passes after the changes are published.
+- [x] Confirm Linux CI passes after the changes are published.
 - [ ] Pass Stage 0 acceptance and write the Chinese learning recap.
 
 - [x] 创建 CMake 静态库、CLI 和测试 target。
@@ -40,7 +40,7 @@ Status / 状态：Active / 进行中
 - [ ] 添加拥有所有权的图像 buffer 模型与不变量测试。
 - [x] 添加 CLI smoke 路径。
 - [x] 添加 Linux CI 工作流。
-- [ ] 修改发布后确认 Linux CI 通过。
+- [x] 修改发布后确认 Linux CI 通过。
 - [ ] 通过阶段零验收并完成中文学习复盘。
 
 ## August Core Baseline / 8 月核心基线
