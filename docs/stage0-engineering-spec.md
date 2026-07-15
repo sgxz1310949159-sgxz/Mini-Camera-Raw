@@ -1,7 +1,8 @@
 # Stage 0 Engineering Spec / 阶段零工程规格
 
-Status / 状态：Draft v0.1  
-Date / 日期：2026-07-06
+Status / 状态：Approved v1.0
+
+Date / 日期：2026-07-09
 
 ## Summary / 摘要
 
@@ -74,22 +75,44 @@ learning/                  Local-only study notes, ignored by git / 本地学习
 ## Initial Technical Decisions / 初始技术决策
 
 - Language standard: C++17 for broad compiler and dependency compatibility.
-- Build system: CMake.
+- Build system: CMake 3.24 or newer; Ninja is the recommended local generator.
 - Namespace: `mini_camera_raw`.
+- Targets: a static `mini_camera_raw` core library, a `mini-camera-raw` CLI,
+  and GoogleTest test executables registered with CTest.
+- Dependency policy: fetch a pinned GoogleTest with CMake `FetchContent`; use
+  installed packages for large runtime dependencies such as LibRaw.
 - Core code must not depend on OpenCV UI types.
 - CPU serial correctness comes before multithreading or GPU acceleration.
 - Image-processing functions should document their expected color space, bit
   depth, and numeric range.
 - Real camera RAW parsing will use LibRaw later, but Stage 0 can use synthetic
   buffers for tests.
+- License: MIT, copyright `上官仙泽`.
 
 - 语言标准：C++17，兼顾编译器和依赖兼容性。
-- 构建系统：CMake。
+- 构建系统：CMake 3.24 或更高版本；本地推荐使用 Ninja 生成器。
 - 命名空间：`mini_camera_raw`。
+- Target：`mini_camera_raw` 静态核心库、`mini-camera-raw` CLI，以及通过
+  CTest 注册的 GoogleTest 测试程序。
+- 依赖策略：使用 CMake `FetchContent` 获取固定版本的 GoogleTest；LibRaw
+  等大型运行时依赖使用系统安装包。
 - 核心代码不能依赖 OpenCV UI 类型。
 - 先保证 CPU 串行版本正确，再考虑多线程或 GPU 加速。
 - 图像处理函数应该记录其预期色彩空间、位深和数值范围。
 - 真实相机 RAW 解析后续使用 LibRaw，但阶段零可以用合成 buffer 做测试。
+- 许可证：MIT，版权署名为 `上官仙泽`。
+
+## Supported RAW Baseline / RAW 支持基线
+
+The first real-camera path targets Sony A7C II (`ILCE-7CM2`) `.ARW` files.
+Three local samples have been confirmed by file headers. They remain ignored
+by git and are not approved for redistribution. Stage 0 tests use generated
+synthetic Bayer fixtures, so a public checkout does not depend on private RAW
+files.
+
+第一条真实相机处理路径以 Sony A7C II（`ILCE-7CM2`）的 `.ARW` 文件为目标。
+目前已通过文件头确认 3 个本地样张。样张继续被 git 忽略，且未获准再分发。
+阶段零测试使用生成的合成 Bayer fixture，因此公开 checkout 不依赖私有 RAW 文件。
 
 ## Data Model Direction / 数据模型方向
 
@@ -118,10 +141,40 @@ The first implementation should prefer clarity:
 - use owned buffers before designing external memory views
 - avoid implicit conversion between linear and nonlinear spaces
 - keep metadata explicit rather than hidden in comments
+- treat black and white references as the nominal `[0, 1]` interval, not as
+  a permanent storage clamp
+- permit out-of-range working values when the stage contract allows them;
+  clipping must be an explicit operation
 
 - 先使用拥有所有权的 buffer，再设计外部内存视图
 - 避免在线性空间和非线性空间之间做隐式转换
 - 让元数据显式存在，而不是藏在注释里
+- 把黑白电平视为名义 `[0, 1]` 区间的参考，而不是永久存储裁剪边界
+- 阶段契约允许时保留超范围工作值；裁剪必须是显式操作
+
+## Schedule and Scope Guard / 时间与范围约束
+
+- Formal project start: 2026-07-14.
+- Planned pause: 2026-07-18 through 2026-08-02, inclusive.
+- Available effort: about 28 hours per active week.
+- Core acceptance deadline: 2026-08-25.
+- Extension and portfolio polish window: September 2026.
+
+- 正式开始：2026-07-14。
+- 计划暂停：2026-07-18 至 2026-08-02，含首尾日期。
+- 可投入时间：有效周每周约 28 小时。
+- 核心版本验收截止：2026-08-25。
+- 扩展功能和作品整理：2026 年 9 月。
+
+Because the pause leaves roughly three active development weeks before the
+fixed deadline, the August acceptance baseline prioritizes a correct,
+explainable CPU pipeline over breadth. UI, Metal, general camera support,
+advanced local adjustments, and aggressive optimization are September or
+optional work unless earlier checkpoints finish with verified margin.
+
+由于暂停期后到固定截止日期前大约只剩 3 个有效开发周，8 月验收基线必须优先保证
+CPU 流水线正确、可解释，而不是追求功能数量。UI、Metal、通用相机支持、高级局部调整
+和激进性能优化属于 9 月扩展或可选内容，除非前序检查点提前完成并留下经过验证的余量。
 
 ## Stage 0 Deliverables / 阶段零交付物
 
@@ -133,6 +186,7 @@ The first implementation should prefer clarity:
 - minimal placeholder library or executable that builds.
 - a first unit-test target using synthetic data.
 - an initial `ImageBuffer` or equivalent design note/header.
+- accepted ADRs, pipeline contract, validation policy, and task plan.
 
 - `README.md`：说明项目目的和目录结构。
 - `.gitignore`：排除本地学习笔记、RAW 文件、构建产物和原始策划书。
@@ -141,6 +195,7 @@ The first implementation should prefer clarity:
 - 能构建的最小占位库或可执行程序。
 - 使用合成数据的第一批单元测试目标。
 - 初始 `ImageBuffer` 或等价设计说明/头文件。
+- 已确认的 ADR、流水线契约、验证策略和任务计划。
 
 ## Acceptance Criteria / 验收标准
 
@@ -153,12 +208,15 @@ Stage 0 is done when:
 - no local learning notes or RAW files appear in normal `git status`
 - the repository has a clear public/private content boundary
 - Stage 1 can start without redesigning the folder structure
+- public documentation contains the accepted decisions and no unresolved
+  Stage 0 blocker
 
 - 从干净 checkout 中可以用 CMake 构建项目
 - 基础测试命令能成功运行
 - 正常 `git status` 中不会出现本地学习笔记或 RAW 文件
 - 仓库有清晰的公开/私有内容边界
 - 阶段一可以在不重做目录结构的前提下开始
+- 公开文档记录了已确认决定，且不存在未解决的阶段零阻塞项
 
 Suggested future commands:
 
@@ -195,18 +253,10 @@ summaries can later be moved into `docs/` if they become useful public material.
 
 这些主题的个人笔记应该先放在 `learning/` 下。等内容整理成熟、适合公开展示后，再重写为 `docs/` 下的正式文档。
 
-## Open Decisions / 待确认决策
+## Decision Status / 决策状态
 
-- Confirm GitHub repository owner and URL.
-- Confirm license author string before adding `LICENSE`.
-- Choose the first camera RAW format and sample image set.
-- Choose the first test framework when writing code.
-- Decide whether Stage 0 should include only a CLI placeholder or also an empty
-  core library target.
+All Stage 0 blocking decisions are resolved. The considered options and final
+answers remain recorded in `docs/stage0-decision-workbook.md`.
 
-- 确认 GitHub 仓库所有者和 URL。
-- 添加 `LICENSE` 前确认许可证作者署名字符串。
-- 选择第一种相机 RAW 格式和样张集合。
-- 写代码时选择第一版测试框架。
-- 决定阶段零只包含 CLI 占位程序，还是也包含空的核心库 target。
-
+所有阶段零阻塞决定均已解决。备选方案和最终答案保留在
+`docs/stage0-decision-workbook.md` 中。

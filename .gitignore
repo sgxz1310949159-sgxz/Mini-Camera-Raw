@@ -29,6 +29,7 @@ compile_commands.json
 *.tmp
 *.cache/
 .cache/
+.c-review-results/
 
 # Local-only learning and planning materials
 /learning/
@@ -58,4 +59,3 @@ compile_commands.json
 *.orf
 *.RW2
 *.rw2
-

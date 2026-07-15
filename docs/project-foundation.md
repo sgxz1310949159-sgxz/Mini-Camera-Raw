@@ -53,6 +53,16 @@ the final repository into a portfolio artifact: code plus reasoning.
 
 ## Roadmap / 路线图
 
+Schedule note: the fixed 2026-08-25 acceptance covers the core baseline:
+Stage 0, a complete but simple Stage 1 CPU path, and a reduced Stage 2 tone
+engine. Stage 3 and Stage 4 remain part of the roadmap but move to the
+September extension window. This protects principle study, numeric validation,
+and reproducibility from being traded for feature count.
+
+进度说明：固定的 2026-08-25 验收覆盖核心基线，即阶段零、完整但简单的阶段一
+CPU 路径，以及缩减后的阶段二影调引擎。阶段三和阶段四仍保留在路线图中，但移至
+9 月扩展窗口。这样可以避免为了堆叠功能而牺牲原理学习、数值验证和可复现性。
+
 ### Stage 0: Engineering Baseline / 阶段零：工程底座
 
 Goal: create a durable project base before implementing image algorithms.
@@ -280,4 +290,3 @@ Every stage should be checked with five categories:
 - 视觉验收：输出没有明显偏色、裁剪、光晕或断层问题。
 - 性能验收：对固定输入记录耗时和内存测量结果。
 - 学习验收：能在项目笔记中解释对应原理。
-

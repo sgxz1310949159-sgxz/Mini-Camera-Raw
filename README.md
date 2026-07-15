@@ -52,11 +52,53 @@ planning document are kept local-only. See `docs/repository-boundary.md`.
 
 ## Current Status / 当前状态
 
-Stage 0 planning has started. The immediate goal is to define the engineering
-baseline: project structure, MVP scope, data model, build system, test approach,
-and acceptance criteria.
+The Stage 0 build and test skeleton is available: a static core library, a
+minimal CLI, GoogleTest/CTest integration, and a Linux CI workflow. The next
+implementation milestone is the P2 image model. The first real-camera path
+targets local Sony A7C II `.ARW` files.
 
-阶段零规划已经开始。当前目标是定义工程底座：项目结构、MVP 范围、数据模型、构建系统、测试方式和验收标准。
+阶段零构建与测试骨架已经可用，包括静态核心库、最小 CLI、GoogleTest/CTest 集成和
+Linux CI 工作流。下一个实施里程碑是 P2 图像模型。第一条真实相机路径以本地
+Sony A7C II `.ARW` 文件为目标。
+
+Key references / 关键文档：
+
+- [Stage 0 engineering specification / 阶段零工程规格](docs/stage0-engineering-spec.md)
+- [ISP pipeline contract / ISP 流水线契约](docs/pipeline-contract.md)
+- [Validation policy / 验证策略](docs/validation-policy.md)
+- [Implementation plan / 实施计划](tasks/plan.md)
+
+## Build and Test / 构建与测试
+
+Requirements / 环境要求：
+
+- CMake 3.24 or newer / CMake 3.24 或更高版本
+- a C++17 compiler / 支持 C++17 的编译器
+- Ninja
+
+Configure, build, test, and run the CLI smoke path:
+
+配置、构建、测试并运行 CLI smoke 路径：
+
+```sh
+cmake -S . -B build/default -G Ninja -DCMAKE_BUILD_TYPE=Debug
+cmake --build build/default
+ctest --test-dir build/default --output-on-failure
+./build/default/apps/mini-camera-raw --version
+```
+
+The first test-enabled configure downloads the pinned GoogleTest dependency.
+To build the library and CLI without downloading test dependencies:
+
+第一次启用测试的配置会下载固定版本的 GoogleTest。若只构建核心库和 CLI，且不下载
+测试依赖：
+
+```sh
+cmake -S . -B build/no-tests -G Ninja -DBUILD_TESTING=OFF \
+  -DCMAKE_BUILD_TYPE=Debug
+cmake --build build/no-tests
+./build/no-tests/apps/mini-camera-raw --version
+```
 
 ## Directory Map / 目录结构
 
@@ -70,4 +112,3 @@ docs/                      Public project documentation / 公开项目文档
 samples/                   Public sample policy and optional tiny fixtures / 示例数据策略和可选小型测试数据
 learning/                  Local-only study notes, ignored by git / 本地学习笔记，已被 git 忽略
 ```
-
