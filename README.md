@@ -52,14 +52,16 @@ planning document are kept local-only. See `docs/repository-boundary.md`.
 
 ## Current Status / 当前状态
 
-The Stage 0 build and test skeleton is available: a static core library, a
-minimal CLI, GoogleTest/CTest integration, and a Linux CI workflow. The next
-implementation milestone is the P2 image model. The first real-camera path
-targets local Sony A7C II `.ARW` files.
+The Stage 0 build/test skeleton and P2 owned image model are available: a
+static core library, a minimal CLI, GoogleTest/CTest integration, Linux CI,
+and validated Bayer/linear working buffers. The separate Chinese learning
+recap remains before total Stage 0 acceptance. The next code milestone is P3;
+the first real-camera path targets local Sony A7C II `.ARW` files.
 
-阶段零构建与测试骨架已经可用，包括静态核心库、最小 CLI、GoogleTest/CTest 集成和
-Linux CI 工作流。下一个实施里程碑是 P2 图像模型。第一条真实相机路径以本地
-Sony A7C II `.ARW` 文件为目标。
+阶段零构建测试骨架与 P2 owned 图像模型已经可用，包括静态核心库、最小 CLI、
+GoogleTest/CTest 集成、Linux CI，以及经过校验的 Bayer/线性工作 buffer。
+阶段零总验收前仍需完成独立的中文学习复盘。下一个代码里程碑是 P3；第一条真实
+相机路径以本地 Sony A7C II `.ARW` 文件为目标。
 
 Key references / 关键文档：
 

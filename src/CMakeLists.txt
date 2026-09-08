@@ -1,4 +1,8 @@
-add_library(mini_camera_raw STATIC about.cpp)
+add_library(
+  mini_camera_raw STATIC
+  about.cpp
+  image_buffer.cpp
+)
 add_library(mini_camera_raw::mini_camera_raw ALIAS mini_camera_raw)
 
 target_compile_features(mini_camera_raw PUBLIC cxx_std_17)

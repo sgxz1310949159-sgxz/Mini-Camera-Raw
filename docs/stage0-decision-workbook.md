@@ -6,9 +6,9 @@ Date / 日期：2026-07-09
 
 ## Decision Record / 决策记录
 
-The following decisions were accepted on 2026-07-09:
+The following decisions were accepted on 2026-07-09; D6 scheduling was updated on 2026-09-08 by shifting post-pause milestones by 37 days:
 
-以下决定已于 2026-07-09 确认：
+以下决定已于 2026-07-09 确认；D6 排期于 2026-09-08 更新，将暂停后节点顺延 37 天：
 
 - D1: GoogleTest.
 - D2: static core library plus CLI.
@@ -16,8 +16,8 @@ The following decisions were accepted on 2026-07-09:
 - D4: MIT license, copyright name `上官仙泽`.
 - D5: Sony A7C II (`ILCE-7CM2`) and local `.ARW` samples.
 - D6: about 28 hours per week; formal start 2026-07-14; pause
-  2026-07-18 through 2026-08-02; core acceptance deadline 2026-08-25;
-  extension and portfolio work may continue into September.
+  2026-07-18 through 2026-09-08; core acceptance deadline 2026-10-01;
+  extension and portfolio work is scheduled for 2026-10-08 through 2026-11-06.
 
 - D1：GoogleTest。
 - D2：静态核心库加 CLI。
@@ -25,8 +25,8 @@ The following decisions were accepted on 2026-07-09:
 - D4：MIT 许可证，版权署名为 `上官仙泽`。
 - D5：Sony A7C II（`ILCE-7CM2`）及本地 `.ARW` 样张。
 - D6：每周约 28 小时；2026-07-14 正式开始；2026-07-18 至
-  2026-08-02 暂停；2026-08-25 完成核心版本验收；扩展功能和作品整理
-  可延续至 9 月。
+  2026-09-08 暂停；2026-10-01 完成核心版本验收；扩展功能和作品整理
+  安排在 2026-10-08 至 2026-11-06。
 
 Chinese is valid UTF-8 in the MIT license, so transliteration is unnecessary.
 

@@ -181,14 +181,14 @@ explainable, testable, and usable even if later stages are cut.
 
 Current schedule decision / 当前进度决定：
 
-The 2026-07-18 to 2026-08-02 pause leaves roughly three active development
-weeks before the fixed 2026-08-25 deadline. Therefore the August acceptance
+The 2026-07-18 to 2026-09-08 pause leaves roughly three active development
+weeks before the fixed 2026-10-01 deadline. Therefore the September–October acceptance
 baseline contains Stage 0, a simple complete Stage 1 CPU pipeline, and a
-reduced Stage 2 tone engine. Stage 3 and Stage 4 move to September.
+reduced Stage 2 tone engine. Stage 3 and Stage 4 move to 2026-10-08 to 2026-11-06.
 
-2026-07-18 至 2026-08-02 的暂停期使固定的 2026-08-25 截止日期前大约只剩
-3 个有效开发周。因此，8 月验收基线包含阶段零、简单但完整的阶段一 CPU 流水线，
-以及缩减后的阶段二影调引擎；阶段三和阶段四移至 9 月。
+2026-07-18 至 2026-09-08 的暂停期使固定的 2026-10-01 截止日期前大约只剩
+3 个有效开发周。因此，9—10 月验收基线包含阶段零、简单但完整的阶段一 CPU 流水线，
+以及缩减后的阶段二影调引擎；阶段三和阶段四移至 2026-10-08 至 2026-11-06。
 
 ## Work Worth Doing Before Algorithm Implementation / 算法实现前值得完成的工作
 

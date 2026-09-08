@@ -1,4 +1,8 @@
-add_executable(mini_camera_raw_test about_test.cpp)
+add_executable(
+  mini_camera_raw_test
+  about_test.cpp
+  image_buffer_test.cpp
+)
 target_compile_features(mini_camera_raw_test PRIVATE cxx_std_17)
 target_link_libraries(
   mini_camera_raw_test

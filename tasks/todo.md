@@ -29,7 +29,7 @@ Status / 状态：Active / 进行中
 
 - [x] Create CMake static-library, CLI, and test targets.
 - [x] Integrate a pinned GoogleTest release.
-- [ ] Add the owned image-buffer model and invariant tests.
+- [x] Add the owned image-buffer model and invariant tests.
 - [x] Add a CLI smoke path.
 - [x] Add the Linux CI workflow.
 - [x] Confirm Linux CI passes after the changes are published.
@@ -37,13 +37,13 @@ Status / 状态：Active / 进行中
 
 - [x] 创建 CMake 静态库、CLI 和测试 target。
 - [x] 集成固定版本的 GoogleTest。
-- [ ] 添加拥有所有权的图像 buffer 模型与不变量测试。
+- [x] 添加拥有所有权的图像 buffer 模型与不变量测试。
 - [x] 添加 CLI smoke 路径。
 - [x] 添加 Linux CI 工作流。
 - [x] 修改发布后确认 Linux CI 通过。
 - [ ] 通过阶段零验收并完成中文学习复盘。
 
-## August Core Baseline / 8 月核心基线
+## September–October Core Baseline / 9—10 月核心基线
 
 - [ ] P3 RAW ingest and sensor normalization.
 - [ ] P4 white balance and bilinear demosaic.
@@ -57,7 +57,7 @@ Status / 状态：Active / 进行中
 - [ ] P6 曝光、直方图与一种影调曲线。
 - [ ] P7 可复现性、数值、视觉与学习验收。
 
-## September Extensions / 9 月扩展
+## 2026-10-08 to 2026-11-06 Extensions / 2026-10-08 至 2026-11-06扩展
 
 - [ ] Select Stage 3 controls from evidence and learning value.
 - [ ] Add benchmarks before any parallel optimization.

@@ -1,8 +1,8 @@
 # Stage 0 Engineering Spec / 阶段零工程规格
 
-Status / 状态：Approved v1.0
+Status / 状态：Approved v1.1
 
-Date / 日期：2026-07-09
+Date / 日期：2026-07-16
 
 ## Summary / 摘要
 
@@ -152,29 +152,61 @@ The first implementation should prefer clarity:
 - 把黑白电平视为名义 `[0, 1]` 区间的参考，而不是永久存储裁剪边界
 - 阶段契约允许时保留超范围工作值；裁剪必须是显式操作
 
+### P2 Acceptance Contract / P2 验收契约
+
+The initial owned image model is accepted only when all of the following are
+true:
+
+第一版 owned 图像模型只有在以下条件全部满足时才通过验收：
+
+- public metadata and buffer types implement the combinations and error
+  semantics recorded in ADR-002
+- zero dimensions, invalid channel/stride/storage/state combinations, and all
+  relevant `size_t` multiplication overflows are rejected before allocation or
+  access
+- deterministic tests cover one-pixel, odd-size, ordinary Bayer, padded-row,
+  and float working buffers, including const and mutable access
+- copy behavior owns independent storage and move behavior transfers the
+  allocation without adding a custom ownership abstraction
+- no operation performs color conversion, normalization, clipping, or a
+  per-sample finite-value scan
+- a Ninja clean configure/build and full CTest run pass, and a separate clean
+  `BUILD_TESTING=OFF` configure/build also passes
+
+- 公开 metadata 与 buffer 类型实现 ADR-002 中记录的合法组合和错误语义
+- 零尺寸、非法通道/stride/storage/状态组合，以及所有相关 `size_t` 乘法
+  溢出都必须在分配或访问前被拒绝
+- 确定性测试覆盖单像素、奇数尺寸、普通 Bayer、带行 padding 和 float 工作
+  buffer，并包含 const 与可变访问
+- copy 行为持有独立 storage，move 行为转移 allocation，且不增加自定义所有权
+  抽象
+- 不执行色彩转换、归一化、裁剪或逐样本有限值扫描
+- 使用 Ninja 的干净配置、构建和完整 CTest 通过；另一个干净的
+  `BUILD_TESTING=OFF` 配置与构建也通过
+
 ## Schedule and Scope Guard / 时间与范围约束
 
 - Formal project start: 2026-07-14.
-- Planned pause: 2026-07-18 through 2026-08-02, inclusive.
+- Planned pause: 2026-07-18 through 2026-09-08, inclusive.
 - Available effort: about 28 hours per active week.
-- Core acceptance deadline: 2026-08-25.
-- Extension and portfolio polish window: September 2026.
+- Core acceptance deadline: 2026-10-01.
+- Extension and portfolio polish window: 2026-10-08 through 2026-11-06.
 
 - 正式开始：2026-07-14。
-- 计划暂停：2026-07-18 至 2026-08-02，含首尾日期。
+- 计划暂停：2026-07-18 至 2026-09-08，含首尾日期。
 - 可投入时间：有效周每周约 28 小时。
-- 核心版本验收截止：2026-08-25。
-- 扩展功能和作品整理：2026 年 9 月。
+- 核心版本验收截止：2026-10-01。
+- 扩展功能和作品整理：2026-10-08 至 2026-11-06。
 
 Because the pause leaves roughly three active development weeks before the
-fixed deadline, the August acceptance baseline prioritizes a correct,
+fixed deadline, the September–October acceptance baseline prioritizes a correct,
 explainable CPU pipeline over breadth. UI, Metal, general camera support,
-advanced local adjustments, and aggressive optimization are September or
+advanced local adjustments, and aggressive optimization are 2026-10-08 to 2026-11-06 or
 optional work unless earlier checkpoints finish with verified margin.
 
-由于暂停期后到固定截止日期前大约只剩 3 个有效开发周，8 月验收基线必须优先保证
+由于暂停期后到固定截止日期前大约只剩 3 个有效开发周，9—10 月验收基线必须优先保证
 CPU 流水线正确、可解释，而不是追求功能数量。UI、Metal、通用相机支持、高级局部调整
-和激进性能优化属于 9 月扩展或可选内容，除非前序检查点提前完成并留下经过验证的余量。
+和激进性能优化属于 2026-10-08 至 2026-11-06扩展或可选内容，除非前序检查点提前完成并留下经过验证的余量。
 
 ## Stage 0 Deliverables / 阶段零交付物
 

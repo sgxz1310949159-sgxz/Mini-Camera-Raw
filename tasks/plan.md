@@ -4,16 +4,22 @@ Status / 状态：Approved baseline / 已确认基线
 
 Date / 日期：2026-07-09
 
+P2 refinement / P2 细化：2026-07-16
+
 ## Delivery Definition / 交付定义
 
-The fixed 2026-08-25 acceptance is the **core summer baseline**, not the full
+The fixed 2026-10-01 acceptance is the **core summer baseline**, not the full
 original Stage 0-4 ambition. It must demonstrate an explainable RAW-to-image
 CPU path plus a small tone engine. Stage 3 color/local controls and Stage 4
-optimization/API export remain September extensions.
+optimization/API export remain 2026-10-08 to 2026-11-06 extensions.
 
-固定的 2026-08-25 验收定义为**暑期核心基线**，而不是原始阶段零到阶段四的全部设想。
+固定的 2026-10-01 验收定义为**暑期核心基线**，而不是原始阶段零到阶段四的全部设想。
 核心版本必须展示可解释的 RAW 到图像 CPU 路径和小型影调引擎。阶段三色彩/局部控制与
-阶段四优化/API 导出保留为 9 月扩展。
+阶段四优化/API 导出保留为 2026-10-08 至 2026-11-06 的扩展。
+
+Schedule revised on 2026-09-08: the pause is extended through 2026-09-08; resume on 2026-09-09. All post-pause windows shift by 37 days. Weekly effort remains 28 hours; completed milestones and work-package estimates are unchanged.
+
+2026-09-08 排期更新：暂停延长至 2026-09-08，2026-09-09 恢复；暂停后的所有窗口顺延 37 天。每周仍投入 28 小时，已完成节点和工作包工时估算保持不变。
 
 ## Schedule / 日程
 
@@ -21,12 +27,12 @@ optimization/API export remain September extensions.
 |---|---:|---|
 | 2026-07-09 to 07-13 | preparation / 准备期 | Approve contracts, install tools, prepare learning workspace / 确认契约、安装工具、准备学习空间 |
 | 2026-07-14 to 07-17 | about 16 h / 约 16 小时 | Stage 0 build, test, image-model skeleton / 阶段零构建、测试和图像模型骨架 |
-| 2026-07-18 to 08-02 | paused / 暂停 | No planned project work / 不安排项目任务 |
-| 2026-08-03 to 08-09 | about 28 h / 约 28 小时 | RAW ingest, metadata, normalization, white balance / RAW 读取、元数据、归一化和白平衡 |
-| 2026-08-10 to 08-16 | about 28 h / 约 28 小时 | Bilinear demosaic, color/display conversion, file output / 双线性去马赛克、色彩/显示转换和文件输出 |
-| 2026-08-17 to 08-23 | about 28 h / 约 28 小时 | Exposure, histogram, one tone curve, CLI integration / 曝光、直方图、一种影调曲线和 CLI 集成 |
-| 2026-08-24 to 08-25 | about 8 h / 约 8 小时 | Acceptance, defect fixes, reproducibility and learning recap / 验收、缺陷修复、复现检查和学习复盘 |
-| September / 9 月 | flexible / 弹性 | Stage 3 and 4 extensions selected by evidence / 根据证据选择阶段三、四扩展 |
+| 2026-07-18 to 09-08 | paused / 暂停 | No planned project work / 不安排项目任务 |
+| 2026-09-09 to 09-15 | about 28 h / 约 28 小时 | RAW ingest, metadata, normalization, white balance / RAW 读取、元数据、归一化和白平衡 |
+| 2026-09-16 to 09-22 | about 28 h / 约 28 小时 | Bilinear demosaic, color/display conversion, file output / 双线性去马赛克、色彩/显示转换和文件输出 |
+| 2026-09-23 to 09-29 | about 28 h / 约 28 小时 | Exposure, histogram, one tone curve, CLI integration / 曝光、直方图、一种影调曲线和 CLI 集成 |
+| 2026-09-30 to 10-01 | about 8 h / 约 8 小时 | Acceptance, defect fixes, reproducibility and learning recap / 验收、缺陷修复、复现检查和学习复盘 |
+| 2026-10-08 to 2026-11-06 / 2026-10-08 至 2026-11-06 | flexible / 弹性 | Stage 3 and 4 extensions selected by evidence / 根据证据选择阶段三、四扩展 |
 
 ## Work Packages / 工作包
 
@@ -89,14 +95,33 @@ Files / 文件：
 Behavior and tests / 行为与测试：
 
 - represent owned contiguous Bayer `uint16_t` and working `float` buffers
-- expose dimensions, stride, pixel format, CFA pattern, and color state
-- reject invalid dimensions, storage size, stride, and state combinations
-- test zero, one-pixel, odd-size, and normal images
+- expose dimensions, element stride, pixel format, CFA pattern, color state,
+  and declared nominal range
+- allow explicit row padding while keeping one contiguous owned allocation
+- reject zero dimensions, storage mismatch, short stride, unknown enums,
+  incompatible state combinations, and overflow in row/element/byte counts
+- test one-pixel, odd-size, ordinary, padded-row, and float working images,
+  typed const/mutable access, bounds, and ordinary copy/move ownership behavior
+- verify with a Ninja clean build and full CTest run, then a separate clean
+  `BUILD_TESTING=OFF` build
 
 - 表达连续且拥有所有权的 Bayer `uint16_t` 与工作 `float` buffer
-- 显式提供尺寸、行跨度、像素格式、CFA 排列和色彩状态
-- 拒绝非法尺寸、存储大小、行跨度和状态组合
-- 测试零尺寸、单像素、奇数尺寸和普通图像
+- 显式提供尺寸、以元素计的行跨度、像素格式、CFA 排列、色彩状态和声明的
+  名义范围
+- 在保持单块连续 owned allocation 的同时允许显式行 padding
+- 拒绝零尺寸、storage 不匹配、过短 stride、未知枚举、不兼容状态组合，以及
+  行大小/元素数/字节数计算溢出
+- 测试单像素、奇数尺寸、普通、带行 padding 和 float 工作图像，并覆盖带类型
+  的 const/可变访问、边界与普通 copy/move 所有权行为
+- 使用 Ninja 干净构建和完整 CTest 验证，再执行独立的干净
+  `BUILD_TESTING=OFF` 构建
+
+Dependencies / 依赖：P1 build/test skeleton and accepted ADR-002 / P1 构建测试
+骨架与已确认的 ADR-002。
+
+Acceptance oracle / 验收判据：the public API contract in ADR-002 and the P2
+acceptance contract in `docs/stage0-engineering-spec.md` / ADR-002 的公开 API
+契约与 `docs/stage0-engineering-spec.md` 的 P2 验收契约。
 
 ### P3. RAW Ingest and Sensor Normalization / RAW 读取与传感器归一化
 
@@ -218,8 +243,8 @@ Evidence / 证据：
 
 At each weekly checkpoint, protect P3-P5 correctness first. If the schedule
 slips, reduce P6 controls to exposure only before weakening tests,
-documentation, or learning work. Do not pull Stage 3/4 work into August until
+documentation, or learning work. Do not pull Stage 3/4 work into September–October until
 the acceptance evidence above is complete.
 
 每周检查点首先保护 P3-P5 的正确性。如果进度落后，先把 P6 缩减到仅保留曝光，
-不要削弱测试、文档或学习任务。在上述验收证据齐全之前，不把阶段三、四工作提前到 8 月。
+不要削弱测试、文档或学习任务。在上述验收证据齐全之前，不把阶段三、四工作提前到 9—10 月。
