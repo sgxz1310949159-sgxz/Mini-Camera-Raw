@@ -57,6 +57,24 @@ initial portability target should be:
 - Linux x86_64 + GCC 或 Clang
 - 核心库使用 C++17，不依赖编译器专属语言扩展
 
+## P3 Dependency Check / P3 依赖核验
+
+On 2026-09-10, P3 links the installed LibRaw package through CMake FindPkgConfig
+and its imported target. Local LibRaw 0.22.1 and Apple Clang 21.0.0 were verified.
+The API baseline is 0.21+; 0.21.4 headers were also checked for rawparams and
+CONVERTFLOAT_TO_INT. This does not claim every older release supports ILCE-7CM2.
+The local Homebrew package supplies a redundant C++ standard-library link flag,
+which Apple ld reports as a duplicate-library warning; no flags are suppressed.
+The existing Linux workflow now installs pkg-config and libraw-dev. A new remote
+CI run requires publication and has not been executed in this worktree.
+
+2026-09-10，P3 通过 CMake FindPkgConfig imported target 链接系统 LibRaw。本机已
+验证 LibRaw 0.22.1 和 Apple Clang 21.0.0。API 基线为 0.21+；同时核对了 0.21.4
+头文件中的 rawparams 和 CONVERTFLOAT_TO_INT，不代表所有旧版本支持 ILCE-7CM2。
+Homebrew 包提供重复的 C++ 标准库链接参数，Apple ld 会提示重复库，未屏蔽参数。
+现有 Linux 工作流已补充安装 pkg-config 与 libraw-dev；新远端 CI 需发布后运行，
+本 worktree 未执行。
+
 ## Recheck Triggers / 重新记录条件
 
 Update this document when the compiler, CMake minimum version, dependency

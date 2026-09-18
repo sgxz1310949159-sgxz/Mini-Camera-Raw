@@ -147,7 +147,37 @@ Behavior and tests / 行为与测试：
 - 保留名义 `[0,1]` 外的数学有效值
 - 验证合成精确样例，并运行本地 A7C II 集成检查
 
+P3 execution slices (2026-09-10); total estimate remains 22 h:
+
+P3 实施增量（2026-09-10），总估算仍为 22 小时：
+
+1. Contract and ADR-005, then normalization TDD (normalize header/source/test
+   and source/test CMake). Accept exact hand vectors and invalid-input rejection;
+   verify `ctest --test-dir build/p3 -R Normalize --output-on-failure`.
+2. RAW public metadata and private LibRaw adapter with synthetic layout tests
+   (raw header/source, private header, decoder tests and CMake registration).
+   Depends on slice 1; accept crop/pitch/CFA/ownership checks and error tests;
+   verify `ctest --test-dir build/p3 -R Raw --output-on-failure`.
+3. Build discovery, dependency documentation and review evidence. Depends on 2;
+   run all commands in `docs/p3-raw-normalization-spec.md`, then review tests first.
+4. Authorized local Sony sample integration, numeric/mosaic checks and separate
+   learning acceptance remain explicit gates; do not mark them done from synthetic tests.
+
+1. 先完成契约与 ADR-005，再以 TDD 完成归一化（头/源/测试和两处 CMake）；
+   验收手算向量和非法输入拒绝，执行上述 Normalize 定向测试。
+2. 完成 RAW 公开元数据和私有 LibRaw 适配层及合成布局测试（RAW 头/源、私有头、
+   解码测试和 CMake 注册）；依赖增量 1，验收裁剪/pitch/CFA/所有权与错误路径。
+3. 完成构建发现、依赖文档及审查证据；依赖增量 2，执行 P3 规格全部命令，先审测试。
+4. 已授权 Sony 样张集成、数值/马赛克检查和独立学习验收仍为明确门槛，不凭合成测试勾选。
+
 ### P4. White Balance and Bilinear Demosaic / 白平衡与双线性去马赛克
+
+Entry update 2026-09-18: P3 local acceptance is complete, including user-confirmed
+learning and coarse visual inspection. Follow [P4 handoff](p4-handoff.md) to
+confirm P4 learning, then specify the algorithm/API before implementation.
+
+2026-09-18 启动更新：P3 本地验收已完成，包括用户确认的学习完成和粗略视觉检查。
+按 [P4 交接](p4-handoff.md) 确认 P4 学习，再定义算法/API 规格并实施。
 
 Estimated effort / 预计用时：24 h
 

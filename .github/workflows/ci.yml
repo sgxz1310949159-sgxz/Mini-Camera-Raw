@@ -15,10 +15,10 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v7
 
-      - name: Install Ninja
+      - name: Install build dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install --yes ninja-build
+          sudo apt-get install --yes ninja-build pkg-config libraw-dev
 
       - name: Configure
         run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Debug
