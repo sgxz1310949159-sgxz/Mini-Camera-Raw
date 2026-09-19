@@ -57,9 +57,43 @@ initial portability target should be:
 - Linux x86_64 + GCC 或 Clang
 - 核心库使用 C++17，不依赖编译器专属语言扩展
 
+## P3 Dependency Check / P3 依赖核验
+
+On 2026-09-10, P3 links the installed LibRaw package through CMake FindPkgConfig
+and its imported target. Local LibRaw 0.22.1 and Apple Clang 21.0.0 were verified.
+The API baseline is 0.21+; 0.21.4 headers were also checked for rawparams and
+CONVERTFLOAT_TO_INT. This does not claim every older release supports ILCE-7CM2.
+The local Homebrew package supplies a redundant C++ standard-library link flag,
+which Apple ld reports as a duplicate-library warning; no flags are suppressed.
+The existing Linux workflow now installs pkg-config and libraw-dev. A new remote
+CI run requires publication and has not been executed in this worktree.
+
+2026-09-10，P3 通过 CMake FindPkgConfig imported target 链接系统 LibRaw。本机已
+验证 LibRaw 0.22.1 和 Apple Clang 21.0.0。API 基线为 0.21+；同时核对了 0.21.4
+头文件中的 rawparams 和 CONVERTFLOAT_TO_INT，不代表所有旧版本支持 ILCE-7CM2。
+Homebrew 包提供重复的 C++ 标准库链接参数，Apple ld 会提示重复库，未屏蔽参数。
+现有 Linux 工作流已补充安装 pkg-config 与 libraw-dev；新远端 CI 需发布后运行，
+本 worktree 未执行。
+
 ## Recheck Triggers / 重新记录条件
 
 Update this document when the compiler, CMake minimum version, dependency
 manager, primary operating system, or CI platform changes.
 
 当编译器、CMake 最低版本、依赖管理方式、主要操作系统或 CI 平台发生变化时，更新本文件。
+
+## Callback Compatibility / 回调兼容 — 2026-09-19
+
+The first P3/P4 Linux CI build exposed a data-error callback ABI difference:
+[LibRaw 0.21.2](https://github.com/LibRaw/LibRaw/blob/0.21.2/libraw/libraw_types.h)
+uses an int offset, while
+[0.22.1](https://github.com/LibRaw/LibRaw/blob/0.22.1/libraw/libraw_types.h)
+uses INT64. The private no-op callback now deduces its offset type from the
+set_dataerror_handler parameter. No cast, dependency upgrade or error-check removal
+is used. A syntax-only build against official 0.21.2 headers reproduces the old
+failure and verifies the fix; local 0.22.1 full tests remain required.
+
+首次 P3/P4 Linux CI 暴露数据错误回调 ABI 差异：官方 0.21.2 的偏移为 int，
+0.22.1 为 INT64。私有空操作回调现由 set_dataerror_handler 参数推导偏移类型，
+不使用强制类型转换、不升级依赖、不移除错误检查。使用官方 0.21.2 头文件的
+仅语法编译复现旧失败并验证修复，本机 0.22.1 全套测试仍须通过。

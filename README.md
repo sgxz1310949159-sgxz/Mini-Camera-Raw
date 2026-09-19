@@ -54,20 +54,36 @@ planning document are kept local-only. See `docs/repository-boundary.md`.
 
 The Stage 0 build/test skeleton and P2 owned image model are available: a
 static core library, a minimal CLI, GoogleTest/CTest integration, Linux CI,
-and validated Bayer/linear working buffers. The separate Chinese learning
-recap remains before total Stage 0 acceptance. The next code milestone is P3;
-the first real-camera path targets local Sony A7C II `.ARW` files.
+and validated Bayer/linear working buffers. Stage 0 acceptance and the separate
+Chinese learning recap are complete; see `tasks/stage0-closeout.md`. P3 now has
+LibRaw ingest and explicit sensor normalization with synthetic tests. Numeric
+integration on three authorized Sony A7C II `.ARW` samples passed; real-sample
+diagnostic previews were inspected and the user accepted a coarse visual check
+on 2026-09-18. Separate P3 learning completion was also user-confirmed. P3 local
+acceptance is complete; P4 entry is described in `tasks/p4-handoff.md`.
 
 阶段零构建测试骨架与 P2 owned 图像模型已经可用，包括静态核心库、最小 CLI、
 GoogleTest/CTest 集成、Linux CI，以及经过校验的 Bayer/线性工作 buffer。
-阶段零总验收前仍需完成独立的中文学习复盘。下一个代码里程碑是 P3；第一条真实
-相机路径以本地 Sony A7C II `.ARW` 文件为目标。
+阶段零验收和独立的中文学习复盘已完成，详见 `tasks/stage0-closeout.md`。P3 已有
+LibRaw 读取、显式传感器归一化和合成测试；三张已授权 Sony A7C II `.ARW` 的数值集成
+通过，本地诊断预览已检查，用户于 2026-09-18 确认粗略视觉检查无问题及独立 P3 学习完成。
+P3 本地验收完成，P4 启动交接见 `tasks/p4-handoff.md`。
+
+P4 white balance and scalar bilinear demosaic are implemented locally. Debug and
+ASan/UBSan each pass 58/58 tests; three authorized samples pass full-image numeric
+checks. Separate learning and design are user-confirmed; user coarse visual acceptance passed on 2026-09-19. See [P4 verification](tasks/p4-verification-review.md).
+
+P4 白平衡与标量双线性去马赛克已在本地实现。Debug 及 ASan/UBSan 均通过 58/58
+测试，三张授权样张全图数值检查通过。独立学习及设计已由用户确认，用户粗略视觉验收通过。
+详见 [P4 验证](tasks/p4-verification-review.md)。
 
 Key references / 关键文档：
 
 - [Stage 0 engineering specification / 阶段零工程规格](docs/stage0-engineering-spec.md)
 - [ISP pipeline contract / ISP 流水线契约](docs/pipeline-contract.md)
 - [Validation policy / 验证策略](docs/validation-policy.md)
+- [P3 contract / P3 契约](docs/p3-raw-normalization-spec.md)
+- [P4 contract / P4 契约](docs/p4-white-balance-demosaic-spec.md)
 - [Implementation plan / 实施计划](tasks/plan.md)
 
 ## Build and Test / 构建与测试
@@ -77,6 +93,16 @@ Requirements / 环境要求：
 - CMake 3.24 or newer / CMake 3.24 或更高版本
 - a C++17 compiler / 支持 C++17 的编译器
 - Ninja
+- pkg-config and installed LibRaw 0.21+ / pkg-config 与系统安装的 LibRaw 0.21+
+
+Install runtime build dependencies with `brew install pkg-config libraw` on
+macOS or `sudo apt-get install pkg-config libraw-dev` on Ubuntu. LibRaw remains
+required with tests disabled. The CLI currently exposes only the version smoke
+path; P3/P4 processing is available through the C++ library API.
+
+macOS 使用 `brew install pkg-config libraw`，Ubuntu 使用
+`sudo apt-get install pkg-config libraw-dev` 安装依赖；关闭测试时仍需 LibRaw。
+CLI 当前仅提供版本 smoke 路径，P3/P4 处理通过 C++ 库 API 使用。
 
 Configure, build, test, and run the CLI smoke path:
 
