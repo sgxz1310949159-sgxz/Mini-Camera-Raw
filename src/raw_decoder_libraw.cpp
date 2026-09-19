@@ -85,7 +85,10 @@ void check_libraw(int code, const char* stage) {
 
 // LibRaw's default callback prints filenames; errors are instead surfaced by
 // return codes and error_count(), without disclosing private paths.
-void quiet_data_error(void*, const char*, const INT64) {}
+// LibRaw 0.21 uses int offsets; 0.22 uses INT64. Deduce the callback ABI
+// from set_dataerror_handler instead of fixing it to the local version.
+template <typename Offset>
+void quiet_data_error(void*, const char*, Offset) {}
 }  // namespace
 
 namespace detail {

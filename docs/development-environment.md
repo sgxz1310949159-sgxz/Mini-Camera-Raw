@@ -81,3 +81,19 @@ Update this document when the compiler, CMake minimum version, dependency
 manager, primary operating system, or CI platform changes.
 
 当编译器、CMake 最低版本、依赖管理方式、主要操作系统或 CI 平台发生变化时，更新本文件。
+
+## Callback Compatibility / 回调兼容 — 2026-09-19
+
+The first P3/P4 Linux CI build exposed a data-error callback ABI difference:
+[LibRaw 0.21.2](https://github.com/LibRaw/LibRaw/blob/0.21.2/libraw/libraw_types.h)
+uses an int offset, while
+[0.22.1](https://github.com/LibRaw/LibRaw/blob/0.22.1/libraw/libraw_types.h)
+uses INT64. The private no-op callback now deduces its offset type from the
+set_dataerror_handler parameter. No cast, dependency upgrade or error-check removal
+is used. A syntax-only build against official 0.21.2 headers reproduces the old
+failure and verifies the fix; local 0.22.1 full tests remain required.
+
+首次 P3/P4 Linux CI 暴露数据错误回调 ABI 差异：官方 0.21.2 的偏移为 int，
+0.22.1 为 INT64。私有空操作回调现由 set_dataerror_handler 参数推导偏移类型，
+不使用强制类型转换、不升级依赖、不移除错误检查。使用官方 0.21.2 头文件的
+仅语法编译复现旧失败并验证修复，本机 0.22.1 全套测试仍须通过。
