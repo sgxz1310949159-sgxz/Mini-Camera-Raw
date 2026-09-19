@@ -2,9 +2,9 @@
 
 Date / 日期：2026-09-18
 
-Status: entry preparation; learning status and detailed design are not yet confirmed.
+Status: implementation and local engineering checks complete; user coarse visual acceptance passed.
 
-状态：启动准备；学习状态及详细设计尚未确认。
+状态：实现及本地工程检查完成，用户粗略视觉验收通过。
 
 ## Task Transfer / 任务转移
 
@@ -102,3 +102,42 @@ dependencies and performance optimization are outside this handoff.
 边界、奇数/小尺寸、非法增益及非有限/溢出情况。先验证清晰的标量参考，不提前优化。
 数值正确后复用三张已授权原片做适用视觉检查。P5 显示/色彩处理、新依赖及性能优化不在
 本次交接范围。
+
+## P4 Preparation Update / P4 准备更新 — 2026-09-18
+
+The user confirmed P4 is not yet learned; prepare design only, with learning in a
+separate task. The [P4 draft](../docs/p4-white-balance-demosaic-spec.md) and proposed
+ADR-006 are ready for later review. No P4 algorithm is implemented.
+
+用户确认尚未学习 P4，本轮只准备设计，学习另行进行。P4 草案及 ADR-006 提案已备好，
+供后续审阅；尚未实现 P4 算法。
+
+- [x] Verify isolated branch, required HEAD and clean starting tree / 核对独立分支、指定 HEAD 及初始干净状态。
+- [x] Confirm learning status: not started / 确认学习状态：尚未开始。
+- [x] Rebuild baseline and pass 42/42 CTest / 重建基线并通过 42/42 CTest。
+- [x] Prepare draft formulas, API, boundaries and test vectors / 准备公式、API、边界及测试向量草案。
+- [ ] Complete separate learning and learner hand calculation / 完成独立学习及学习者手算。
+- [ ] Review draft and accept ADR before detailed implementation planning / 审阅草案并接受 ADR，再细化实施计划。
+- [ ] Implement WB then demosaic with TDD and numeric/visual review / 以 TDD 先实现白平衡后实现去马赛克，完成数值/视觉审查。
+
+Baseline: CMake 4.3.4, Apple Clang 21.0.0, LibRaw 0.22.1; Debug/Ninja build in
+`build/p4-baseline`, CommandLineTools and existing GoogleTest source cache via
+`FETCHCONTENT_SOURCE_DIR_GOOGLETEST`. Linker reported duplicate `-lc++` warnings;
+build and tests passed. No new sanitizer or real-photo run at this design checkpoint.
+No commit or push.
+
+基线工具版本如上；Debug/Ninja 构建位于 `build/p4-baseline`，使用 CommandLineTools
+及指定变量复用现有 GoogleTest 源码缓存。链接器提示重复 `-lc++`，构建及测试通过。
+本轮仅设计，未新增 sanitizer 或真实照片运行；未提交或推送。
+
+## Current Checkpoint / 当前检查点 — 2026-09-19
+
+Learning and all ADR choices were confirmed by the user. P4 APIs are implemented,
+58/58 Debug and sanitizer tests pass, three real samples pass numeric checks and
+agent visual inspection. User coarse visual acceptance passed on 2026-09-19. Earlier preparation
+sections above are historical. Continue from [verification](p4-verification-review.md).
+No commit/push or P5 work is authorized by this completion record.
+
+用户已确认学习完成及全部 ADR 选择；P4 API 已实现，Debug 与 sanitizer 均通过
+58/58，三张真实样张数值及 Agent 视觉检查完成，用户粗略视觉验收通过。前述准备章节为
+历史记录；从验证报告继续。本记录不授权提交/推送或 P5。

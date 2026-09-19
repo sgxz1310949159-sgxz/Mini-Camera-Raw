@@ -278,3 +278,59 @@ the acceptance evidence above is complete.
 
 每周检查点首先保护 P3-P5 的正确性。如果进度落后，先把 P6 缩减到仅保留曝光，
 不要削弱测试、文档或学习任务。在上述验收证据齐全之前，不把阶段三、四工作提前到 9—10 月。
+
+## P4 Preparation Update / P4 准备更新 — 2026-09-18
+
+The user confirmed P4 is not yet learned; prepare design only, with learning in a
+separate task. The [P4 draft](../docs/p4-white-balance-demosaic-spec.md) and proposed
+ADR-006 are ready for later review. No P4 algorithm is implemented.
+
+用户确认尚未学习 P4，本轮只准备设计，学习另行进行。P4 草案及 ADR-006 提案已备好，
+供后续审阅；尚未实现 P4 算法。
+
+- [x] Verify isolated branch, required HEAD and clean starting tree / 核对独立分支、指定 HEAD 及初始干净状态。
+- [x] Confirm learning status: not started / 确认学习状态：尚未开始。
+- [x] Rebuild baseline and pass 42/42 CTest / 重建基线并通过 42/42 CTest。
+- [x] Prepare draft formulas, API, boundaries and test vectors / 准备公式、API、边界及测试向量草案。
+- [ ] Complete separate learning and learner hand calculation / 完成独立学习及学习者手算。
+- [ ] Review draft and accept ADR before detailed implementation planning / 审阅草案并接受 ADR，再细化实施计划。
+- [ ] Implement WB then demosaic with TDD and numeric/visual review / 以 TDD 先实现白平衡后实现去马赛克，完成数值/视觉审查。
+
+Baseline: CMake 4.3.4, Apple Clang 21.0.0, LibRaw 0.22.1; Debug/Ninja build in
+`build/p4-baseline`, CommandLineTools and existing GoogleTest source cache via
+`FETCHCONTENT_SOURCE_DIR_GOOGLETEST`. Linker reported duplicate `-lc++` warnings;
+build and tests passed. No new sanitizer or real-photo run at this design checkpoint.
+No commit or push.
+
+基线工具版本如上；Debug/Ninja 构建位于 `build/p4-baseline`，使用 CommandLineTools
+及指定变量复用现有 GoogleTest 源码缓存。链接器提示重复 `-lc++`，构建及测试通过。
+本轮仅设计，未新增 sanitizer 或真实照片运行；未提交或推送。
+
+## P4 Execution / P4 实施 — 2026-09-19
+
+Learning completed and three ADR choices accepted by the user. Continue locally;
+no commit/push. Earlier preparation entries are historical.
+用户已确认学习完成及三项 ADR 选择。本地继续，不提交或推送。此前准备记录为历史状态。
+
+1. WB slice: header/source/test plus source/test CMake (five files). Accept literal
+   gains, camera normalization, all CFA, numeric errors and layout invariance.
+   Verify build and `ctest --test-dir build/p4 -R WhiteBalance --output-on-failure`,
+   then full suite and review. / 白平衡增量涉及头/源/测试及两处 CMake，验收增益、相位、
+   数值异常及布局不变量，执行上述定向及全套测试并审查。
+2. Demosaic slice: header/source/test plus two CMake files; depends on accepted
+   contract and slice 1 checkpoint. Accept known stencils, all CFA, borders, minimum
+   sizes and generated oracle. Verify `ctest --test-dir build/p4 -R Demosaic --output-on-failure`,
+   full suite and review. / 去马赛克增量同样五文件，依赖契约及白平衡检查点；验收模板、
+   相位、边界、小尺寸及生成参考，执行定向及全套测试并审查。
+3. Integration: full Debug and ASan/UBSan suites, no-tests build, authorized raw
+   numeric and visual diagnostics, verification report and checklist updates.
+   Inspect diagnostics before reporting completion; distinguish user visual acceptance.
+   / 集成：Debug、ASan/UBSan 全套、关闭测试构建、授权原片数值与视觉诊断、验证报告
+   及清单更新；检查图像，区分用户视觉验收。
+
+P4 execution checkpoint: slices 1–3 engineering work completed, 58/58 Debug and
+sanitizer tests pass; no-tests build and real-sample checks passed. User coarse visual
+acceptance passed on 2026-09-19; see [P4 review](p4-verification-review.md).
+
+P4 实施检查点：增量 1–3 工程工作完成，Debug/sanitizer 各 58/58，通过关闭测试
+构建及真实样张检查；用户粗略视觉验收通过，详见 P4 审查报告。

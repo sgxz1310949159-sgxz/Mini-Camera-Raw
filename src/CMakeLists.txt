@@ -6,6 +6,8 @@ add_library(
   mini_camera_raw STATIC
   about.cpp
   image_buffer.cpp
+  demosaic_bilinear.cpp
+  white_balance.cpp
   normalize.cpp
   raw_decoder_libraw.cpp
 )

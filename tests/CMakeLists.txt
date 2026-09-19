@@ -2,6 +2,8 @@ add_executable(
   mini_camera_raw_test
   about_test.cpp
   image_buffer_test.cpp
+  demosaic_test.cpp
+  white_balance_test.cpp
   normalize_test.cpp
   raw_decoder_test.cpp
 )
