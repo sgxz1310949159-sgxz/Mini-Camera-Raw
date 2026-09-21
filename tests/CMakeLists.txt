@@ -1,5 +1,10 @@
+find_package(ZLIB REQUIRED)
+
 add_executable(
   mini_camera_raw_test
+  png_writer_test.cpp
+  display_encode_test.cpp
+  color_transform_test.cpp
   about_test.cpp
   image_buffer_test.cpp
   demosaic_test.cpp
@@ -12,6 +17,7 @@ target_include_directories(mini_camera_raw_test PRIVATE "${PROJECT_SOURCE_DIR}/s
 target_link_libraries(
   mini_camera_raw_test
   PRIVATE
+    ZLIB::ZLIB
     GTest::gtest_main
     PkgConfig::LibRaw
     mini_camera_raw::mini_camera_raw
