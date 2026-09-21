@@ -94,15 +94,16 @@ Requirements / 环境要求：
 - a C++17 compiler / 支持 C++17 的编译器
 - Ninja
 - pkg-config and installed LibRaw 0.21+ / pkg-config 与系统安装的 LibRaw 0.21+
+- libpng 1.6.x and zlib from maintained patched packages / 带维护补丁的 libpng 1.6.x 与 zlib
 
-Install runtime build dependencies with `brew install pkg-config libraw` on
-macOS or `sudo apt-get install pkg-config libraw-dev` on Ubuntu. LibRaw remains
+Install runtime build dependencies with `brew install pkg-config libraw libpng` on
+macOS or `sudo apt-get install pkg-config libraw-dev libpng-dev` on Ubuntu. LibRaw and libpng/zlib remain
 required with tests disabled. The CLI currently exposes only the version smoke
-path; P3/P4 processing is available through the C++ library API.
+path; P3–P5 processing is available through the C++ library API.
 
-macOS 使用 `brew install pkg-config libraw`，Ubuntu 使用
-`sudo apt-get install pkg-config libraw-dev` 安装依赖；关闭测试时仍需 LibRaw。
-CLI 当前仅提供版本 smoke 路径，P3/P4 处理通过 C++ 库 API 使用。
+macOS 使用 `brew install pkg-config libraw libpng`，Ubuntu 使用
+`sudo apt-get install pkg-config libraw-dev libpng-dev` 安装依赖；关闭测试时仍需 LibRaw 和 libpng/zlib。
+CLI 当前仅提供版本 smoke 路径，P3–P5 处理通过 C++ 库 API 使用。
 
 Configure, build, test, and run the CLI smoke path:
 
@@ -140,3 +141,58 @@ docs/                      Public project documentation / 公开项目文档
 samples/                   Public sample policy and optional tiny fixtures / 示例数据策略和可选小型测试数据
 learning/                  Local-only study notes, ignored by git / 本地学习笔记，已被 git 忽略
 ```
+
+
+## P5 library path / P5 库调用路径
+
+P5 supports explicit camera-to-linear-sRGB conversion and RGB16 sRGB PNG output.
+Color-space identity is separate from processing state/transfer encoding; only sRGB
+is implemented today. Negative and above-one working values survive until an output
+copy is clipped and encoded. Existing unspecified images are not assumed sRGB.
+P5 提供明确的相机到线性 sRGB 转换及 RGB16 sRGB PNG 输出，空间身份与处理状态/
+传递编码分别表达；目前只实现 sRGB。线性负值/超一值保留，输出副本才裁剪编码，
+已有未知空间图像不默认视为 sRGB。
+
+```cpp
+#include "mini_camera_raw/raw_decoder.h"
+#include "mini_camera_raw/white_balance.h"
+#include "mini_camera_raw/demosaic.h"
+#include "mini_camera_raw/color_transform.h"
+#include "mini_camera_raw/display_encode.h"
+#include "mini_camera_raw/png_writer.h"
+#include <stdexcept>
+
+// path is an authorized local RAW; output_path must not already exist.
+// path 为已授权本地 RAW；output_path 必须不存在。
+auto raw = mini_camera_raw::decode_raw(path);
+if (!raw.sensor.camera_wb_tile) throw std::runtime_error("missing camera WB");
+auto linear = mini_camera_raw::normalize(raw.image, raw.sensor.levels);
+auto gains = mini_camera_raw::normalize_camera_wb(
+    *raw.sensor.camera_wb_tile, linear.metadata().cfa_pattern);
+auto balanced = mini_camera_raw::apply_white_balance(linear, gains);
+auto camera = mini_camera_raw::demosaic_bilinear(balanced);
+auto matrix = mini_camera_raw::camera_to_working_matrix(raw.sensor);
+auto working = mini_camera_raw::transform_camera_rgb(camera, matrix);
+// Preserve working for later editing. Explicit hard-clip output branch:
+// 保留 working 用于后续编辑；以下为明确的高光硬裁剪输出分支。
+auto clipped_camera = mini_camera_raw::clip_camera_highlights(camera);
+auto display_working = mini_camera_raw::transform_camera_rgb(clipped_camera, matrix);
+auto encoded = mini_camera_raw::encode_srgb16(display_working);
+mini_camera_raw::write_png16(encoded, output_path);
+```
+
+The PNG writer preserves raster orientation, refuses existing targets, and adds no
+private EXIF. A crash can leave an incomplete new file. Caller owns a stable output
+directory/path during writing; concurrent path mutation is not supported. No GUI or
+processing CLI is introduced here. See [P5 verification](tasks/p5-verification-review.md)
+and [ADR-007](docs/decisions/ADR-007-p5-color-and-output.md).
+PNG 写入保留像素方向、拒绝已有目标、不复制私人 EXIF；崩溃可能留下不完整新文件。
+调用方须在写入期间保持目录/路径稳定，不支持并发修改路径。本阶段不引入 GUI 或
+处理 CLI，见 P5 验证及 ADR-007。
+
+The explicit camera-domain highlight clip sacrifices output highlight detail to
+avoid the magenta fully-saturated core observed with direct encoding. It is not
+reconstruction. Future P6 should design its rendering branch from preserved working
+data; the clipped preview must not become the editing source.
+显式相机域高光裁剪以牺牲输出高光细节为代价，避免直接编码时出现的完全饱和核心
+粉紫；这不是重建。未来 P6 应从保留的工作数据设计渲染分支，不使用裁剪预览作编辑源。

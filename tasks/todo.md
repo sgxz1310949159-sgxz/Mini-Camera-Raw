@@ -130,3 +130,98 @@ No commit or push.
 - [x] User coarse visual acceptance, 2026-09-19 / 用户粗略视觉验收，2026-09-19。
 
 Evidence / 证据：[P4 verification and review / P4 验证与审查](p4-verification-review.md).
+
+## P5 Preparation / P5 准备 — 2026-09-19
+
+Worktree: `build/p5-worktree`; branch `codex/p5-color-display-output`;
+HEAD `d8cd328c16ab593b307c59524a9762d9120ee3c9`; clean starting tree.
+See [P5 design preparation](../docs/p5-design-preparation.md).
+工作区、分支和 HEAD 如上，起始干净；参见 P5 设计准备。
+
+- [x] Verify isolated baseline and ignored build/learning paths / 核对独立基线及忽略边界。
+- [x] Fresh Debug build and 58/58 CTest / 新建 Debug 构建，58/58 测试通过。
+- [x] User confirms P5 not yet learned: prepare design only / 用户确认尚未学习 P5，仅准备设计。
+- [x] Prepare capability map, source evidence and acceptance outline / 准备能力划分、来源依据和验收提纲。
+- [x] Inspect authorized sample matrix metadata in place, 2026-09-21 / 原位核对三张授权样张矩阵，2026-09-21。
+- [x] P5 learning completed, user-confirmed 2026-09-21 / P5 学习完成，用户于 2026-09-21 确认。
+- [x] Review capability boundaries and output/dependency choice / 审阅能力边界及输出/依赖选择。
+- [x] Complete module contracts, dependency review and ADR-007 / 完成模块契约、依赖审查及 ADR-007。
+- [x] Plan TDD slices after design acceptance / 设计接受后规划 TDD 增量。
+
+CMake 4.3.4, Apple Clang 21.0.0, LibRaw 0.22.1; cached GoogleTest 1.17.0.
+Duplicate -lc++ warnings did not prevent build/tests. No new sanitizer, no-tests,
+real-photo run, code change, commit or push at this preparation checkpoint.
+基线版本如上；重复 -lc++ 警告未影响构建和测试。本准备检查点未新增 sanitizer、
+关闭测试或真实照片运行，未修改代码、提交或推送。
+
+Run from P5 worktree / 从 P5 工作区执行：
+
+```sh
+DEVELOPER_DIR=/Library/Developer/CommandLineTools cmake -S . -B build/p5-baseline -G Ninja -DCMAKE_BUILD_TYPE=Debug -DFETCHCONTENT_SOURCE_DIR_GOOGLETEST='/Users/sgxz/Mini - Camera Raw/build/p2-verify/_deps/googletest-src'
+DEVELOPER_DIR=/Library/Developer/CommandLineTools cmake --build build/p5-baseline
+DEVELOPER_DIR=/Library/Developer/CommandLineTools ctest --test-dir build/p5-baseline --output-on-failure
+```
+
+
+P5 update 2026-09-21: learning confirmed; three sample matrices match and have zero
+fourth columns. Focused libpng dependency/API review and proposed ADR-007 prepared.
+Design and dependency approval remain pending; no P5 algorithm or publication.
+P5 更新：学习已确认；三张矩阵相同且第四列为零。已补充 libpng 定向依赖/API 审查
+和 ADR-007 提案；设计及依赖仍待确认，未实现 P5 算法或发布。
+
+
+P5 design clarification, 2026-09-21: user accepted sRGB-first output flow with future
+color-space extensibility. Prefer separate color-space metadata over sRGB-only state
+combinations; preserve the working image and clip only its output derivative.
+Dependency and exact API approval are not inferred. See updated ADR-007.
+P5 设计澄清：用户确认首版 sRGB 输出流程，并要求未来扩展色彩空间。优先采用独立
+色彩空间元数据，保留工作图像，仅裁剪输出副本。不推定依赖及精确 API 已获确认，
+详见更新的 ADR-007。
+
+
+## P5 implementation / P5 实施 — 2026-09-21
+
+User authorized stage implementation including proposed libpng output; no publication.
+用户授权实施本阶段（包含提案 libpng 输出），不含发布。
+
+- [x] S1: metadata contract, tests then implementation; full suite / 元数据契约，先测试后实现并全套验证。
+- [x] S2: matrix header/source/tests + two CMake files; directed and full tests / 矩阵五文件增量，定向及全套验证。
+- [x] S3: sRGB output header/source/tests + CMake; same checks / 编码增量，同样验证。
+- [x] S4: PNG writer and independent decoder tests; dependency/CI config / PNG 与独立解码测试及构建配置。
+- [x] S5: Debug, ASan/UBSan, no-tests, real samples, review and evidence / 集成验证、样张、审查及记录。
+
+Each slice depends on the previous contract checkpoint. Run cmake --build build/p5,
+then ctest --test-dir build/p5 --output-on-failure. Keep all generated files ignored.
+每增量依赖前一契约检查点，执行上述构建/测试；生成文件始终忽略。
+
+
+### P5 local engineering checkpoint / P5 本地工程检查点
+
+- [x] Debug 73/73 and ASan/UBSan 73/73; no-tests build / 两套测试各 73/73，关闭测试构建通过。
+- [x] Three authorized samples, numeric reference and source preservation / 三张授权样张参考比较及原图保留验证。
+- [x] Agent thumbnail inspection and highlight limitation recorded / Agent 缩略图检查及高光限制已记录。
+- [x] User coarse acceptance: daylight and dark scene / 用户日光与暗景粗验收通过。
+- [x] Backlit highlights: explicit output clipping implemented and revised previews accepted / 逆光显式高光输出裁剪已实现，新版粗验收通过。
+- [ ] Remote Linux CI after separate publication authorization / 另获发布授权后的远端 Linux CI。
+
+See [P5 verification](p5-verification-review.md). No commit/push.
+详见 P5 验证，未提交或推送。
+
+### Authorized highlight extension / 已授权高光扩展
+
+- [x] User chose implementation in P5; explicit camera-domain output clip contract / 用户选择 P5 内实现，已定义相机域输出裁剪契约。
+- [x] Red/green tests and immutable scalar reference / 红绿测试与不修改输入的标量参考。
+- [x] Revised three-scene visual acceptance and self-review / 三场景新版粗验收与自审完成（独立审查覆盖限制见记录）。
+
+- [x] Highlight extension: Debug and ASan/UBSan 76/76, no-tests build, real source immutability / 高光扩展两套 76/76，关闭测试构建及真实源数据不变验证。
+- [x] Self-review complete; independent review returned no report and is not counted / 自审完成，独立审查未返回报告不计完成。
+
+## Publication authorization / 发布授权 — 2026-09-21
+
+User requested upload and merge. The earlier no-publication statements describe
+the implementation checkpoint; publication is now authorized. Submit only P5
+source, tests, build configuration and bilingual documentation; merge after remote
+CI succeeds. Private images, learning and build artifacts remain local.
+用户要求上传合并。此前未发布的表述为实施检查点历史状态，现已授权发布。只提交
+P5 源码、测试、构建配置与双语文档，远端 CI 通过后合并；私人图像、学习及构建产物
+保持本地。

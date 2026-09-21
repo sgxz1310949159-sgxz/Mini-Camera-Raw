@@ -97,3 +97,25 @@ failure and verifies the fix; local 0.22.1 full tests remain required.
 0.22.1 为 INT64。私有空操作回调现由 set_dataerror_handler 参数推导偏移类型，
 不使用强制类型转换、不升级依赖、不移除错误检查。使用官方 0.21.2 头文件的
 仅语法编译复现旧失败并验证修复，本机 0.22.1 全套测试仍须通过。
+
+
+## P5 dependencies / P5 依赖 — 2026-09-21
+
+P5 uses installed libpng via FindPNG/PNG::PNG (runtime 1.6.58 locally); zlib is
+transitive for production and directly used by independent test decoding. CMake
+reports the SDK zlib 1.2.12 interface. macOS/Linux POSIX file creation is the supported
+writer baseline. CI installs libpng-dev from the maintained distribution; this
+unpublished change has not run remote CI. Review vendor security backports when
+selecting older version-numbered packages. No Windows writer support is claimed.
+P5 使用系统 libpng（本机运行时 1.6.58），zlib 为生产传递依赖和独立解码测试直接
+依赖，CMake 报告 SDK zlib 1.2.12 接口。写入基线支持 macOS/Linux POSIX；CI 增加
+发行版 libpng-dev，但未发布变更尚未运行远端 CI。旧版本编号包须核对安全补丁，
+不宣称 Windows 写入支持。
+
+Libpng is under PNG Reference Library License v2; zlib uses its own permissive
+license. Preserve third-party notices when redistributing libraries. Installed
+packages are used; no third-party source was copied. See the P5 preparation document
+for dated advisory checks and API constraints.
+libpng 使用 PNG Reference Library License v2，zlib 使用自身宽松许可证；分发库时
+保留第三方通知。使用系统包，不复制第三方源码；日期化公告检查与 API 约束见 P5
+准备文档。
