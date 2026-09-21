@@ -274,3 +274,64 @@ TEST(ImageBufferTest, MovesOwnedStorageToDestination) {
 
 }  // namespace
 }  // namespace mini_camera_raw
+
+namespace mini_camera_raw {
+TEST(P5MetadataTest, PreservesLegacyUnknownAndChecksColorTransferPairs) {
+  ImageMetadata m{1,
+                  1,
+                  3,
+                  3,
+                  PixelFormat::kFloat32,
+                  CfaPattern::kNone,
+                  ColorState::kLinearWorkingRgb,
+                  {0, 1, true}};
+  EXPECT_EQ(ImageBuffer::create(m).metadata().rgb_color_space,
+            RgbColorSpace::kUnspecified);
+  m.rgb_color_space = RgbColorSpace::kSrgb;
+  EXPECT_THROW(ImageBuffer::create(m), std::invalid_argument);
+  m.transfer_function = TransferFunction::kLinear;
+  EXPECT_NO_THROW(ImageBuffer::create(m));
+  m.transfer_function = TransferFunction::kSrgb;
+  EXPECT_THROW(ImageBuffer::create(m), std::invalid_argument);
+  m.transfer_function = TransferFunction::kLinear;
+  m.color_state = ColorState::kLinearCameraRgb;
+  EXPECT_THROW(ImageBuffer::create(m), std::invalid_argument);
+  m.color_state = ColorState::kLinearWorkingRgb;
+  m.rgb_color_space = static_cast<RgbColorSpace>(999);
+  EXPECT_THROW(ImageBuffer::create(m), std::invalid_argument);
+  m.rgb_color_space = RgbColorSpace::kSrgb;
+  m.transfer_function = static_cast<TransferFunction>(999);
+  EXPECT_THROW(ImageBuffer::create(m), std::invalid_argument);
+}
+TEST(P5MetadataTest, EncodedRgbRequiresExactIntegerAndColorContract) {
+  ImageMetadata m{1,
+                  1,
+                  3,
+                  3,
+                  PixelFormat::kUInt16,
+                  CfaPattern::kNone,
+                  ColorState::kEncodedRgb,
+                  {0, 65535, false},
+                  RgbColorSpace::kSrgb,
+                  TransferFunction::kSrgb};
+  EXPECT_NO_THROW(ImageBuffer::from_uint16(m, {0, 32768, 65535}));
+  auto bad = m;
+  bad.numeric_range.allows_out_of_range = true;
+  EXPECT_THROW(ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.numeric_range.nominal_max = 1;
+  EXPECT_THROW(ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.rgb_color_space = RgbColorSpace::kUnspecified;
+  EXPECT_THROW(ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.pixel_format = PixelFormat::kFloat32;
+  EXPECT_THROW(ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.cfa_pattern = CfaPattern::kRggb;
+  EXPECT_THROW(ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.channel_count = 1;
+  EXPECT_THROW(ImageBuffer::create(bad), std::invalid_argument);
+}
+}  // namespace mini_camera_raw
