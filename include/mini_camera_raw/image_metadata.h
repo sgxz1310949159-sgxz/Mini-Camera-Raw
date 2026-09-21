@@ -23,7 +23,13 @@ enum class ColorState {
   kLinearBayer,
   kLinearCameraRgb,
   kLinearWorkingRgb,
+  kEncodedRgb,
 };
+
+// RGB primaries/white point and transfer are independent of processing stage.
+// Unspecified preserves legacy metadata; output encoders must reject it.
+enum class RgbColorSpace { kUnspecified, kSrgb };
+enum class TransferFunction { kUnspecified, kLinear, kSrgb };
 
 struct NumericRange {
   // Declared sample semantics only; ImageBuffer never clips to this interval.
@@ -42,6 +48,8 @@ struct ImageMetadata {
   CfaPattern cfa_pattern;
   ColorState color_state;
   NumericRange numeric_range;
+  RgbColorSpace rgb_color_space = RgbColorSpace::kUnspecified;
+  TransferFunction transfer_function = TransferFunction::kUnspecified;
 };
 
 }  // namespace mini_camera_raw

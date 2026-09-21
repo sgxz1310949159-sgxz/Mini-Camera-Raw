@@ -51,6 +51,7 @@ bool is_known(ColorState state) {
     case ColorState::kLinearBayer:
     case ColorState::kLinearCameraRgb:
     case ColorState::kLinearWorkingRgb:
+    case ColorState::kEncodedRgb:
       return true;
   }
   return false;
@@ -69,7 +70,32 @@ void require_linear_range(const NumericRange& range) {
   }
 }
 
+void validate_color_identity(const ImageMetadata& m) {
+  if (m.rgb_color_space != RgbColorSpace::kUnspecified &&
+      m.rgb_color_space != RgbColorSpace::kSrgb)
+    throw std::invalid_argument("unknown RGB color space");
+  if (m.transfer_function != TransferFunction::kUnspecified &&
+      m.transfer_function != TransferFunction::kLinear &&
+      m.transfer_function != TransferFunction::kSrgb)
+    throw std::invalid_argument("unknown transfer function");
+  if (m.color_state == ColorState::kEncodedRgb) {
+    if (m.rgb_color_space != RgbColorSpace::kSrgb ||
+        m.transfer_function != TransferFunction::kSrgb)
+      throw std::invalid_argument(
+          "encoded RGB requires supported space/transfer");
+  } else if (m.color_state == ColorState::kLinearWorkingRgb &&
+             m.rgb_color_space == RgbColorSpace::kSrgb) {
+    if (m.transfer_function != TransferFunction::kLinear)
+      throw std::invalid_argument("working sRGB requires linear transfer");
+  } else if (m.rgb_color_space != RgbColorSpace::kUnspecified ||
+             m.transfer_function != TransferFunction::kUnspecified) {
+    throw std::invalid_argument(
+        "incompatible color identity and processing state");
+  }
+}
+
 void validate_state_combination(const ImageMetadata& metadata) {
+  validate_color_identity(metadata);
   switch (metadata.color_state) {
     case ColorState::kRawBayer:
       if (metadata.pixel_format != PixelFormat::kUInt16 ||
@@ -94,6 +120,16 @@ void validate_state_combination(const ImageMetadata& metadata) {
             "linear Bayer requires float32, one channel, and a concrete CFA");
       }
       require_linear_range(metadata.numeric_range);
+      return;
+    case ColorState::kEncodedRgb:
+      if (metadata.pixel_format != PixelFormat::kUInt16 ||
+          metadata.channel_count != 3 ||
+          metadata.cfa_pattern != CfaPattern::kNone ||
+          metadata.numeric_range.nominal_min != 0 ||
+          metadata.numeric_range.nominal_max != 65535 ||
+          metadata.numeric_range.allows_out_of_range)
+        throw std::invalid_argument(
+            "encoded RGB requires uint16 RGB [0,65535]");
       return;
     case ColorState::kLinearCameraRgb:
     case ColorState::kLinearWorkingRgb:
