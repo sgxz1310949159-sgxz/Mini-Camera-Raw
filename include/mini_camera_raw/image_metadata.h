@@ -24,6 +24,7 @@ enum class ColorState {
   kLinearCameraRgb,
   kLinearWorkingRgb,
   kEncodedRgb,
+  kToneMappedWorkingRgb,
 };
 
 // RGB primaries/white point and transfer are independent of processing stage.

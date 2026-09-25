@@ -98,12 +98,12 @@ Requirements / 环境要求：
 
 Install runtime build dependencies with `brew install pkg-config libraw libpng` on
 macOS or `sudo apt-get install pkg-config libraw-dev libpng-dev` on Ubuntu. LibRaw and libpng/zlib remain
-required with tests disabled. The CLI currently exposes only the version smoke
-path; P3–P5 processing is available through the C++ library API.
+required with tests disabled. P6 now connects P3–P5 through the processing CLI with explicit exposure, tone and
+highlight policy. See [CLI usage](docs/cli.md).
 
 macOS 使用 `brew install pkg-config libraw libpng`，Ubuntu 使用
 `sudo apt-get install pkg-config libraw-dev libpng-dev` 安装依赖；关闭测试时仍需 LibRaw 和 libpng/zlib。
-CLI 当前仅提供版本 smoke 路径，P3–P5 处理通过 C++ 库 API 使用。
+P6 现通过处理 CLI 串联 P3–P5，显式设置曝光、影调及高光策略，见 [CLI 用法](docs/cli.md)。
 
 Configure, build, test, and run the CLI smoke path:
 
@@ -183,16 +183,14 @@ mini_camera_raw::write_png16(encoded, output_path);
 
 The PNG writer preserves raster orientation, refuses existing targets, and adds no
 private EXIF. A crash can leave an incomplete new file. Caller owns a stable output
-directory/path during writing; concurrent path mutation is not supported. No GUI or
-processing CLI is introduced here. See [P5 verification](tasks/p5-verification-review.md)
+directory/path during writing; concurrent path mutation is not supported. This P5 library example is retained; the P6 processing CLI is documented separately. See [P5 verification](tasks/p5-verification-review.md)
 and [ADR-007](docs/decisions/ADR-007-p5-color-and-output.md).
 PNG 写入保留像素方向、拒绝已有目标、不复制私人 EXIF；崩溃可能留下不完整新文件。
-调用方须在写入期间保持目录/路径稳定，不支持并发修改路径。本阶段不引入 GUI 或
-处理 CLI，见 P5 验证及 ADR-007。
+调用方须在写入期间保持目录/路径稳定，不支持并发修改路径。本 P5 库示例保留，P6 处理 CLI 另有文档；见 P5 验证及 ADR-007。
 
 The explicit camera-domain highlight clip sacrifices output highlight detail to
 avoid the magenta fully-saturated core observed with direct encoding. It is not
-reconstruction. Future P6 should design its rendering branch from preserved working
-data; the clipped preview must not become the editing source.
+reconstruction. P6 renders from preserved data and applies the same EV/tone parameters to both
+explicit branches; the clipped preview never becomes the editing source.
 显式相机域高光裁剪以牺牲输出高光细节为代价，避免直接编码时出现的完全饱和核心
-粉紫；这不是重建。未来 P6 应从保留的工作数据设计渲染分支，不使用裁剪预览作编辑源。
+粉紫；这不是重建。P6 从保留数据渲染，两个显式分支使用同一组曝光/影调参数，不使用裁剪预览作编辑源。

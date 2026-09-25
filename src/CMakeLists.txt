@@ -7,6 +7,8 @@ message(STATUS "PNG ${PNG_VERSION_STRING}; zlib ${ZLIB_VERSION_STRING}")
 
 add_library(
   mini_camera_raw STATIC
+  tone.cpp
+  histogram.cpp
   png_writer.cpp
   display_encode.cpp
   color_transform.cpp

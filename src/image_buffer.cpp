@@ -52,6 +52,7 @@ bool is_known(ColorState state) {
     case ColorState::kLinearCameraRgb:
     case ColorState::kLinearWorkingRgb:
     case ColorState::kEncodedRgb:
+    case ColorState::kToneMappedWorkingRgb:
       return true;
   }
   return false;
@@ -83,6 +84,10 @@ void validate_color_identity(const ImageMetadata& m) {
         m.transfer_function != TransferFunction::kSrgb)
       throw std::invalid_argument(
           "encoded RGB requires supported space/transfer");
+  } else if (m.color_state == ColorState::kToneMappedWorkingRgb) {
+    if (m.rgb_color_space != RgbColorSpace::kSrgb ||
+        m.transfer_function != TransferFunction::kLinear)
+      throw std::invalid_argument("tone-mapped RGB requires explicit linear sRGB");
   } else if (m.color_state == ColorState::kLinearWorkingRgb &&
              m.rgb_color_space == RgbColorSpace::kSrgb) {
     if (m.transfer_function != TransferFunction::kLinear)
@@ -133,6 +138,7 @@ void validate_state_combination(const ImageMetadata& metadata) {
       return;
     case ColorState::kLinearCameraRgb:
     case ColorState::kLinearWorkingRgb:
+    case ColorState::kToneMappedWorkingRgb:
       if (metadata.pixel_format != PixelFormat::kFloat32 ||
           metadata.channel_count != 3 ||
           metadata.cfa_pattern != CfaPattern::kNone) {

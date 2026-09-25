@@ -36,3 +36,11 @@ image. The authorized explicit camera-domain clip is specified in the color-tran
 [P5 verification](../tasks/p5-verification-review.md).
 逐通道输出裁剪是数值编码边界，并非完整的传感器饱和渲染策略。真实逆光样张暴露
 高光粉紫；补充相机域显式裁剪后的新版已通过用户粗略视觉验收。高光渲染应位于编码之前并保留原线性工作图像，已授权的相机域显式裁剪详见色彩矩阵契约与上述验证记录。
+
+## P6 additive integration / P6 增量衔接 — 2026-09-25
+
+ADR-008 additionally permits float kToneMappedWorkingRgb with explicit sRGB and
+linear transfer. All clipping, encoding, ownership and quantization rules above
+remain unchanged. The original P5 working state stays accepted.
+ADR-008 增量允许明确 sRGB/linear 的 float kToneMappedWorkingRgb，原 P5 工作状态
+继续接受；上述裁剪、编码、所有权及量化规则不变。
