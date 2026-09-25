@@ -1,5 +1,62 @@
 # Implementation Plan / 实施计划
 
+## Active P6 checkpoint / 当前 P6 检查点 — 2026-09-25
+
+P6 implements exposure, histogram, one monotonic tone curve and CLI. The user
+confirmed study and approved the corrected right-column output on 2026-09-25.
+ADR-009 supersedes ADR-008's render order. Original baseline: a4130b0, 76 tests.
+P6 实现曝光、直方图、一种单调影调曲线及 CLI。用户已确认学习，并于 2026-09-25
+批准右列输出修正。ADR-009 替代 ADR-008 输出顺序；原始基线 a4130b0，76 项测试。
+
+Follow-up sequence / 跟进顺序：
+1. Update contract/ADR, reproduce negative-EV failure / 更新契约与 ADR、复现负 EV 失败。
+2. Fix derivative ordering and CLI explanation, run full tests / 修正输出副本顺序及 CLI 说明、全套测试。
+3. Run sanitizers/no-tests build, three local samples and review / sanitizer、关闭测试构建、三样张及审查。
+4. Record evidence; keep broader tone appearance deferred / 记录证据，影调观感继续延期。
+
+| Slice / 增量 | Dependencies / 依赖 | Files / 文件 | Acceptance / 验收 |
+|---|---|---|---|
+| S1 exposure / 曝光 | approved contract / 契约确认 | tone.h, tone.cpp, tone_test.cpp, src/CMakeLists.txt, tests/CMakeLists.txt | signed EV, neutral identity, errors, ownership / 带符号 EV、中性恒等、错误及所有权 |
+| S2 histogram / 统计 | approved contract / 契约确认 | histogram.h, histogram.cpp, histogram_test.cpp, two CMake files / 两个 CMake 文件 | exact edges, conservation, padding, RGB/Y / 精确边界、守恒、padding、RGB/Y |
+| S3 tone state / 影调状态 | approved state / 状态确认 | image_metadata.h, image_buffer.cpp, image_buffer_test.cpp, display_encode.cpp, display_encode_test.cpp | new state validation and encoder compatibility / 新状态校验及编码兼容 |
+| S4 tone curve / 影调曲线 | S1,S3 | tone.h, tone.cpp, tone_test.cpp, histogram.cpp, histogram_test.cpp | known values, Y monotonicity, ratios, new-state histogram / 参考值、Y 单调、比例、新状态统计 |
+| S5 render branch / 输出分支 | S1–S4 | render_pipeline.h, render_pipeline.cpp, render_pipeline_test.cpp, two CMake files / 两个 CMake 文件 | both modes apply EV/tone once; P5 neutral regression / 两模式只应用一次曝光影调，P5 中性回归 |
+| S6 CLI / 命令行 | S5 | apps/mini_camera_raw.cpp, apps/CMakeLists.txt, tests/cli_test.cmake, tests/CMakeLists.txt, docs/cli.md | strict arguments, --version, nonoverwrite, synthetic end-to-end / 严格参数、版本、不覆盖、合成端到端 |
+
+render_pipeline files may remain app-internal; settle that boundary in the final
+render-cli spec. Each slice starts with failing observable tests, then implementation,
+targeted tests, full suite and tests-first code review. Do not proceed past a failed
+checkpoint. Update specs before implementation if review changes a contract.
+render_pipeline 可保持应用内部，最终 render-cli 规格明确边界。每增量先写可观察的
+失败测试，再实现、定向测试、全套及先看测试的代码审查；失败不继续，契约变化先改规格。
+
+Use the preparation document's configure/build/full-test commands; after test names
+exist, targeted CTest filters are `-R 'Exposure|Histogram|Tone|Render|Cli'`. Verify
+the selected count is nonzero. Final checks: fresh sanitizer and BUILD_TESTING=OFF
+builds, authorized in-place samples, numeric/visual evidence, git diff --check,
+ignore-boundary check. Agreed sample checks are complete; broader tone appearance
+is deferred. Commit, push, PR and merge are now authorized.
+用准备文档的配置/构建/全套命令，测试命名落实后用上述过滤器定向运行并确认数量非零。
+最后做新 sanitizer/关闭测试构建、授权样张原位数值及视觉验证、diff 与忽略边界检查。
+约定样张检查已完成，更广影调观感延期；现已授权提交、推送、PR 及合并。
+
+Accepted: curve/state and ADR-009 output order. Daylight/dark checks and the
+corrected backlit candidate are accepted within the agreed scope. Broader tone
+appearance remains deferred. Publish after review, then require Linux CI success
+and no unresolved required review finding before merging.
+已接受曲线/状态及 ADR-009 输出顺序；日光/暗景检查与逆光修正候选在约定范围内已
+确认。更广影调观感延期。完成审查后发布，Linux CI 通过且无未解决必改项后合并。
+
+Implementation detail: S2 added a private shared luminance helper. S6 was split
+into argument tests/CLI implementation, then synthetic decoder-substitute execution
+and PNG checks reusing the existing independent decoder in a test-only header.
+Production has no synthetic-input switch. Final evidence: [P6 verification](p6-verification-review.md).
+实施细化：S2 增加内部共享亮度 helper；S6 分参数测试/CLI 实施、合成解码替身执行及
+PNG 验证两个检查点，复用原独立 PNG 解码器到测试头文件。生产不提供合成输入开关，
+最终证据见 P6 验证。
+
+---
+
 Status / 状态：Approved baseline / 已确认基线
 
 Date / 日期：2026-07-09
@@ -429,3 +486,16 @@ CI succeeds. Private images, learning and build artifacts remain local.
 用户要求上传合并。此前未发布的表述为实施检查点历史状态，现已授权发布。只提交
 P5 源码、测试、构建配置与双语文档，远端 CI 通过后合并；私人图像、学习及构建产物
 保持本地。
+
+P6 highlight follow-up completed locally: Debug/sanitizers 101/101, 36 real cases,
+byte-identical approved backlit previews. See p6-highlight-regression-check.md.
+P6 高光跟进本地完成：两套 101/101、36 个真实案例、逆光预览逐字节匹配已确认候选。
+
+## P6 publication plan / P6 发布计划
+
+1. Reconcile acceptance records and review complete P6 diff / 统一验收记录，审查完整差异。
+2. Commit focused core, CLI and documentation changes on codex/p6-tone-cli / 在专用分支分组提交核心、CLI、文档。
+3. Push and create PR; pass Linux CI, inspect review state, merge verified head / 推送并创建 PR，通过 Linux CI，检查审查状态并合并已验证提交。
+
+Publication authorization covers P6 only. P7 and broader tone work are subsequent tasks.
+本轮发布范围为 P6；P7 与更广影调工作为后续任务。

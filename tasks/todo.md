@@ -225,3 +225,52 @@ CI succeeds. Private images, learning and build artifacts remain local.
 用户要求上传合并。此前未发布的表述为实施检查点历史状态，现已授权发布。只提交
 P5 源码、测试、构建配置与双语文档，远端 CI 通过后合并；私人图像、学习及构建产物
 保持本地。
+
+## P6 Active Checkpoint / P6 当前检查点 — 2026-09-25
+
+- [x] Clean isolated HEAD and live main both a4130b0 / 干净独立 HEAD 与实时 main 均为 a4130b0。
+- [x] Fresh Debug configure/build and 76/76 tests / 新建 Debug 配置、编译及 76/76 测试。
+- [x] Read P5 contracts, risk/boundary rules and exact P6 scope / 读取 P5 契约、风险/边界及 P6 精确范围。
+- [x] User confirms P6 study; no fabricated exercise record / 用户确认已学习 P6，不补造习题记录。
+- [x] Prepare bilingual design, API outline, proposed ADR and conditional slices / 双语设计、API 提纲、ADR 提案及条件性增量计划。
+- [x] Review curve, processing state, output policy and module contracts / 审阅曲线、处理状态、输出策略及模块契约。
+- [x] S1 exposure red/green, full suite and review / 曝光红绿、全套及审查。
+- [x] S2 histogram red/green, full suite and review / 直方图红绿、全套及审查。
+- [x] S3 tone-state validation and encoder compatibility / 影调状态校验及编码兼容。
+- [x] S4 tone-curve red/green, full suite and review / 影调曲线红绿、全套及审查。
+- [x] S5 two-branch integration and P5 neutral regression / 双分支集成及 P5 中性回归。
+- [x] S6 minimal CLI and synthetic end-to-end checks / 最小 CLI 及合成端到端检查。
+- [x] Fresh Debug/sanitizer/no-tests builds and final review / 新 Debug、sanitizer、关闭测试构建及终审。
+- [x] Authorized in-place samples: numeric and agent visual checks / 授权样张原位数值及 Agent 视觉检查。
+- [x] Agreed sample acceptance: daylight/dark and corrected backlit candidate / 约定样张验收：日光/暗景与逆光修正候选。
+
+See [P6 preparation](../docs/p6-design-preparation.md) and the active section of
+[plan](plan.md). This checkpoint supersedes old P6 not-yet-learned status, not
+unrelated historical tasks. Local implementation verified; agreed sample acceptance is recorded below.
+Publication is authorized; broader tone appearance remains deferred.
+参见 P6 准备与当前计划。本检查点覆盖旧 P6 尚未学习状态，不覆盖其他历史任务。
+本地实现已验证，约定样张验收见下方；已授权发布，更广影调观感延期。
+
+---
+
+Evidence / 证据：[P6 verification and review](p6-verification-review.md).
+
+## P6 Visual Feedback Follow-up / P6 视觉反馈跟进
+
+- [x] User reports no obvious daylight/dark issues / 用户确认日光、暗景无明显问题。
+- [x] Reproduce backlit magenta and exposure-dependent clip bypass / 复现逆光粉紫及曝光造成的裁剪失效。
+- [x] Verify a P5-baseline output candidate without changing production / 不改生产代码，验证 P5 基准输出候选。
+- [x] Review and implement corrected output baseline and negative-EV regression / 审阅并实现修正输出基准与负 EV 回归。
+- [x] Agent review and byte-exact match to user-approved candidate / Agent 复查，文件逐字节匹配用户已确认候选。
+
+Broader tone appearance is deferred until after the middle stage by user request.
+This is not visual acceptance. See [diagnosis](p6-highlight-regression-check.md).
+更广影调观感按用户要求留到中期后，不计视觉通过；见诊断记录。
+
+## P6 publication / P6 发布
+
+- [x] User authorized Git operations through merge / 用户授权 Git 操作直到合并。
+- [x] Reconcile current acceptance status / 统一当前验收状态。
+- [x] Review full diff and public/private boundary / 审查完整差异与公开边界。
+- [ ] Commit, push and open PR / 提交、推送并创建 PR。
+- [ ] Linux CI and review checks, then merge / Linux CI 与审查检查后合并。
