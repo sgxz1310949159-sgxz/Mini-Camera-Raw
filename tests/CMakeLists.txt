@@ -2,6 +2,8 @@ find_package(ZLIB REQUIRED)
 
 add_executable(
   mini_camera_raw_test
+  render_pipeline_test.cpp
+  cli_pipeline_test.cpp
   tone_test.cpp
   histogram_test.cpp
   png_writer_test.cpp
@@ -36,3 +38,17 @@ set_tests_properties(
   Cli.VersionSmoke
   PROPERTIES PASS_REGULAR_EXPRESSION "Mini-Camera Raw 0\\.1\\.0"
 )
+
+target_include_directories(mini_camera_raw_test PRIVATE "${PROJECT_SOURCE_DIR}/apps")
+
+target_link_libraries(mini_camera_raw_test PRIVATE mini_camera_raw_render)
+
+add_test(NAME Cli.Arguments COMMAND ${CMAKE_COMMAND}
+  -DCLI=$<TARGET_FILE:mini_camera_raw_cli>
+  -DTEST_DIR=${CMAKE_CURRENT_BINARY_DIR}/cli-arguments
+  -P ${CMAKE_CURRENT_SOURCE_DIR}/cli_test.cmake)
+
+add_executable(mini_camera_raw_cli_fixture ../apps/mini_camera_raw.cpp cli_fixture_decoder.cpp)
+target_link_libraries(mini_camera_raw_cli_fixture PRIVATE mini_camera_raw_render)
+target_compile_definitions(mini_camera_raw_test PRIVATE CLI_FIXTURE_PATH="$<TARGET_FILE:mini_camera_raw_cli_fixture>")
+add_dependencies(mini_camera_raw_test mini_camera_raw_cli_fixture)
