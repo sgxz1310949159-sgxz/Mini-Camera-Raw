@@ -258,3 +258,14 @@ security audit. Broader tone appearance remains deferred; Linux CI is a merge ga
 公开边界检查仅包含预期源码、测试、构建配置及双语文档；私人 RAW、生成图像、
 构建产物与学习笔记保持忽略。本次为自审，不声称独立审查或安全审计。更广影调
 观感继续延期，Linux CI 为合并条件。
+
+## Remote verification / 远端验证
+
+[PR #3](https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw/pull/3) publishes
+P6. Both push CI (run 36152429142) and PR CI (run 36152482403) passed on
+3968c95; Linux logs confirm 102/102. Review submissions and unresolved threads
+were empty at the pre-merge check. The final documentation-only head must also
+pass CI before merging; the PR is the authoritative record of the merge result.
+P6 通过 PR #3 发布。3968c95 的 push 与 PR 两次 CI 均成功，运行编号如上，Linux
+日志确认 102/102。合并前检查无审查提交或未解决讨论。最终仅文档提交也须通过 CI
+后合并；最终合并结果以 PR 记录为准。

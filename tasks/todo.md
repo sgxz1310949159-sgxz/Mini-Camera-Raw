@@ -272,5 +272,8 @@ This is not visual acceptance. See [diagnosis](p6-highlight-regression-check.md)
 - [x] User authorized Git operations through merge / 用户授权 Git 操作直到合并。
 - [x] Reconcile current acceptance status / 统一当前验收状态。
 - [x] Review full diff and public/private boundary / 审查完整差异与公开边界。
-- [ ] Commit, push and open PR / 提交、推送并创建 PR。
-- [ ] Linux CI and review checks, then merge / Linux CI 与审查检查后合并。
+- [x] Commit, push and open PR #3 / 提交、推送并创建 PR #3。
+- [x] Linux CI 102/102 and no unresolved review threads / Linux CI 102/102，无未解决审查讨论。
+
+Final merge state is tracked by [PR #3](https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw/pull/3); every final head must pass CI before merge.
+最终合并状态以 PR #3 为准；最终提交必须通过 CI 才合并。
