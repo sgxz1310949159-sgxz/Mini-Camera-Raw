@@ -6,7 +6,8 @@
 namespace mini_camera_raw {
 ImageBuffer encode_srgb16(const ImageBuffer& linear) {
   auto metadata = linear.metadata();
-  if (metadata.color_state != ColorState::kLinearWorkingRgb ||
+  if ((metadata.color_state != ColorState::kLinearWorkingRgb &&
+       metadata.color_state != ColorState::kToneMappedWorkingRgb) ||
       metadata.rgb_color_space != RgbColorSpace::kSrgb ||
       metadata.transfer_function != TransferFunction::kLinear)
     throw std::invalid_argument("sRGB output requires explicit linear sRGB");

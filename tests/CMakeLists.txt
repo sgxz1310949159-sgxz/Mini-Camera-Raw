@@ -2,6 +2,8 @@ find_package(ZLIB REQUIRED)
 
 add_executable(
   mini_camera_raw_test
+  tone_test.cpp
+  histogram_test.cpp
   png_writer_test.cpp
   display_encode_test.cpp
   color_transform_test.cpp

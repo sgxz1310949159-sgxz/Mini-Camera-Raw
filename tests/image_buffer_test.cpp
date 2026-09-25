@@ -335,3 +335,40 @@ TEST(P5MetadataTest, EncodedRgbRequiresExactIntegerAndColorContract) {
   EXPECT_THROW(ImageBuffer::create(bad), std::invalid_argument);
 }
 }  // namespace mini_camera_raw
+
+namespace mini_camera_raw {
+TEST(P6MetadataTest, ToneMappedStateRequiresExplicitLinearRgbAndRange) {
+  ImageMetadata m{1,
+                  1,
+                  3,
+                  3,
+                  PixelFormat::kFloat32,
+                  CfaPattern::kNone,
+                  ColorState::kToneMappedWorkingRgb,
+                  {0, 1, true},
+                  RgbColorSpace::kSrgb,
+                  TransferFunction::kLinear};
+  EXPECT_NO_THROW((void)ImageBuffer::create(m));
+  for (auto transfer :
+       {TransferFunction::kUnspecified, TransferFunction::kSrgb}) {
+    auto bad = m;
+    bad.transfer_function = transfer;
+    EXPECT_THROW((void)ImageBuffer::create(bad), std::invalid_argument);
+  }
+  auto bad = m;
+  bad.rgb_color_space = RgbColorSpace::kUnspecified;
+  EXPECT_THROW((void)ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.pixel_format = PixelFormat::kUInt16;
+  EXPECT_THROW((void)ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.numeric_range.allows_out_of_range = false;
+  EXPECT_THROW((void)ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.channel_count = 1;
+  EXPECT_THROW((void)ImageBuffer::create(bad), std::invalid_argument);
+  bad = m;
+  bad.cfa_pattern = CfaPattern::kRggb;
+  EXPECT_THROW((void)ImageBuffer::create(bad), std::invalid_argument);
+}
+}  // namespace mini_camera_raw

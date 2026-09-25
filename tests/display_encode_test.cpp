@@ -87,3 +87,18 @@ TEST(DisplayEncodeTest, RejectsUnknownSpaceAndNonfiniteActiveSamples) {
 }
 }  // namespace
 }  // namespace mini_camera_raw
+
+namespace mini_camera_raw {
+TEST(DisplayEncodeTest, ToneMappedLinearStateUsesSameEncodingAndPreservesSource) {
+  ImageMetadata m{1,1,3,3,PixelFormat::kFloat32,CfaPattern::kNone,
+    ColorState::kLinearWorkingRgb,{0,1,true},RgbColorSpace::kSrgb,
+    TransferFunction::kLinear};
+  auto working=ImageBuffer::from_float(m,{-.1f,.18f,2.f});
+  m.color_state=ColorState::kToneMappedWorkingRgb;
+  auto toned=ImageBuffer::from_float(m,{-.1f,.18f,2.f});
+  auto a=encode_srgb16(working);auto b=encode_srgb16(toned);
+  for(int c=0;c<3;++c) EXPECT_EQ(a.uint16_data()[c],b.uint16_data()[c]);
+  EXPECT_FLOAT_EQ(toned.float_data()[0],-.1f);
+  EXPECT_FLOAT_EQ(toned.float_data()[2],2.f);
+}
+}  // namespace mini_camera_raw
