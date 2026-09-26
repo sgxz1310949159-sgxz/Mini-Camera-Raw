@@ -290,3 +290,48 @@ Every stage should be checked with five categories:
 - 视觉验收：输出没有明显偏色、裁剪、光晕或断层问题。
 - 性能验收：对固定输入记录耗时和内存测量结果。
 - 学习验收：能在项目笔记中解释对应原理。
+
+## Product requirements update / 产品要求更新 — 2026-09-26
+
+The intended product must support photographers' varied editing choices, not just
+convert RAW files into viewable PNGs. The user has confirmed three mandatory future
+capabilities. These supersede any earlier wording that treats them as optional:
+项目最终需要支持摄影师多元的编辑选择，不止将 RAW 转成可显示 PNG。用户已确认以下
+三项后续必做能力，覆盖此前将其视为可选项的表述：
+
+| Capability / 能力 | Confirmed requirement / 已确认要求 |
+|---|---|
+| Tonal-region adjustments / 亮度分区调整 | Adjust different brightness regions independently of global exposure / 能分别调整不同亮度区域，不限于全局曝光 |
+| Color adjustments / 颜色调整 | Provide user-controlled color editing beyond the fixed camera-to-working transform / 提供用户可控的颜色编辑，不限于固定相机到工作空间转换 |
+| Continuous preview / 连续预览 | Show updated image results continuously while editing, without requiring a separate CLI export for each change / 编辑过程中连续观看变化，无需每次修改后单独执行 CLI 导出 |
+
+Specific controls, region definitions, formulas, parameter ranges, color semantics,
+UI technology, preview/export consistency, and measurable latency/memory targets
+remain to be specified. The provisional P8–P13 order is recorded in tasks/plan.md;
+no new deadline is set here.
+具体控件、区域定义、公式、参数范围、颜色语义、界面技术、预览/导出一致性及可测量的
+延迟/内存目标尚待定义；暂定 P8–P13 顺序见 tasks/plan.md，不新增截止日期。
+
+The current P6 luminance shoulder is a verified simple formula, not a permanent
+product requirement. The provisional exclusion decision below is now authoritative;
+existing implementation/tests remain available as reference.
+当前 P6 亮度肩部是已验证的简单公式，不是永久产品要求；以下暂定排除决定为当前
+依据，现有实现/测试保留作参考。
+
+This update records future requirements only. It does not authorize GUI development,
+new dependencies, algorithm changes, optimization, publication, or expansion of P7's
+already-run checks into proof that the final editor is complete.
+本更新仅记录后续要求，不启动 GUI、新依赖、算法修改、优化或发布，也不把 P7 已执行
+检查扩大解释为最终编辑器已经完成。
+
+### Provisional tone decision / 影调暂定决定 — 2026-09-26
+
+The user provisionally excludes the current P6 shoulder curve from the formal photo
+processing path. This supersedes the earlier unresolved product-role wording above.
+Keep the existing implementation/tests as a reference for now; no code was removed
+or rerouted in this documentation update. Future formal preview/export design must
+omit this operator unless the user reopens the decision. This decision does not
+exclude all tone curves, tonal-region tools or future output mapping.
+用户暂定当前 P6 肩部曲线不进入正式照片处理路径，覆盖上方产品角色未定的状态。
+暂保留现有实现和测试作为参考；本次文档更新未删除或改接代码。后续正式预览/导出设计
+应排除此算子，除非用户重新讨论决定。本决定不排除所有曲线、亮度分区工具或未来输出映射。

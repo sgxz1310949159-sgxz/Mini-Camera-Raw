@@ -1,6 +1,33 @@
 # Implementation Plan / 实施计划
 
-## Active P6 checkpoint / 当前 P6 检查点 — 2026-09-25
+## Current checkpoint / 当前检查点 — 2026-09-26
+
+P3–P6 are complete within their recorded acceptance boundaries; P5 and P6 merged
+through PR #2 (`a4130b0`) and PR #3 (`158647c`). P7 engineering checks and actual
+learner recap are complete. The user has authorized P7 commit, push, PR and merge;
+publication must pass CI. Final publication evidence is [P7 PR #4](https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw/pull/4), and the final
+external restore/hash receipt remains local. See [P7 acceptance](p7-verification-review.md)
+and [P8 entry audit](p8-entry-audit.md).
+P3–P6 在已记录验收边界内完成；P5/P6 已经上述 PR 合并。P7 工程检查及本人实际复盘
+完成；用户已授权 P7 提交、推送、PR 及合并，发布须通过 CI。最终发布证据以上述 P7 PR #4
+为准，最终外部恢复/哈希凭据保留本地，详见综合验收及入口检查。
+
+Next: P8 detailed briefing, then explicit user confirmation before learning.
+Provisional order: P8 contracts → P9 continuous preview → P10 highlight/output
+review → P11 tonal regions → P12 color → P13 integrated acceptance. The current
+P6 shoulder is excluded from the future formal path; existing code/tests are retained.
+下步先汇报 P8 细节，用户明确确认后才开始学习。暂定顺序：P8 契约→P9 连续预览→
+P10 高光/输出复核→P11 亮度分区→P12 颜色→P13 综合验收。当前 P6 肩部暂不进入
+未来正式路径，现有代码和测试保留。
+
+Earlier dated sections below are historical checkpoints, not the current backlog.
+Unchecked optional/conditional items are not silently accepted; future stage scope
+must be confirmed separately. Stage gates and verified backups are mandatory.
+下方较早日期段落为历史检查点，不代表当前待办。未勾选的可选/条件性事项不计通过，
+后续阶段范围须单独确认；阶段关口和验证备份为必做要求。
+
+
+## Historical P6 checkpoint / 历史 P6 检查点 — 2026-09-25
 
 P6 implements exposure, histogram, one monotonic tone curve and CLI. The user
 confirmed study and approved the corrected right-column output on 2026-09-25.
@@ -499,3 +526,107 @@ P6 高光跟进本地完成：两套 101/101、36 个真实案例、逆光预览
 
 Publication authorization covers P6 only. P7 and broader tone work are subsequent tasks.
 本轮发布范围为 P6；P7 与更广影调工作为后续任务。
+
+## P7 local acceptance / P7 本地综合验收 — 2026-09-25
+
+Initial acceptance scope: verify merged 158647c in this independent worktree; no
+algorithm, new dependency or Stage 3/4 work. Publication was authorized afterward.
+最初验收范围：独立工作区验收已合并 158647c，不改算法、不加依赖、不推进阶段三/四；其后另获发布授权。
+
+1. Baseline: clean initial status, live main equals HEAD and contains P6 merge.
+   基线：初始干净，实时 main 与 HEAD 相同且包含 P6 合并。
+2. Fresh Debug configure/build/CTest with freshly fetched pinned GoogleTest;
+   record compiler/dependency versions and test results. Separate Release with
+   BUILD_TESTING=OFF proves production build independence. Existing sanitizer
+   evidence is reused only if production/tests remain unchanged.
+   新目录 Debug 配置/构建/CTest，重新获取固定 GoogleTest，记录版本与结果；
+   独立 Release 关闭测试证明生产构建独立性。生产/测试无变化才引用既有 sanitizer 证据。
+3. Bind Linux CI logs to the exact merge SHA; map every stage to current tests,
+   reference formulas/tolerances and earlier real-sample metrics without calling
+   earlier runs new results. Review local category sheets read-only.
+   Linux 日志绑定精确合并 SHA；逐阶段对应本轮测试、参考公式/容差和既有真实数值，
+   不把历史运行当作本轮结果；只读复核本地分类图。
+4. Write bilingual consolidated evidence and a new ignored Chinese recap covering
+   formulas, ranges, failure modes and open questions. Learner responses and feedback are now recorded; broader tone appearance
+   stays deferred rather than passed.
+   写双语综合记录及全新忽略的中文复盘，含公式、范围、失效模式和疑问；本人回答及
+   反馈现已记录，更广影调观感保持延期而非通过。
+
+Dependencies: 1 → 2 → 3 → 4. Closeout also updates public status and stage governance;
+local logs/notes stay ignored. Verify with CTest, git diff --check, git status and
+privacy scan. This is a clean build on an existing host, not a fresh OS install.
+依赖：1 → 2 → 3 → 4。收尾另更新公开状态及阶段规范；日志/笔记忽略。
+通过 CTest、差异空白检查、git 状态及隐私扫描验证；这是既有主机上的干净构建，不是重装操作系统。
+
+P7 checkpoint: steps 1–3 complete; step 4 materials and evidence review complete,
+learner responses and feedback recorded. Fresh local 102/102, exact-merge Linux 102/102,
+Release no-tests pass. See [P7 report](p7-verification-review.md).
+P7 检查点：1–3 完成；4 的材料与证据检查及本人回答/反馈完成。新本地 102/102、
+精确合并 Linux 102/102、Release 关闭测试通过，详见综合报告。
+
+## Confirmed future product scope / 已确认后续产品范围 — 2026-09-26
+
+See [foundation update](../docs/project-foundation.md#product-requirements-update--产品要求更新--2026-09-26).
+Tonal-region adjustments, color adjustments and continuous preview are mandatory
+future capabilities. Detailed module boundaries, contracts, acceptance thresholds remain open. The provisional order and shoulder exclusion
+are recorded below; existing reference code remains.
+参见项目基础更新：亮度分区调整、颜色调整、连续预览为后续必做。具体模块边界、契约、
+验收阈值待定；暂定顺序及肩部排除决定见下方，保留现有参考代码。This is requirement recording, not implementation or publication / 本次仅记录要求，不实施或发布。
+
+## Proposed execution order after P7 / P7 后建议执行顺序 — 2026-09-26
+
+This orders the confirmed capabilities for review; it is not authorization to
+implement new stages. It supersedes the older optional-feature ordering, not the
+historical P3–P7 evidence. No new dates, UI dependency or latency target is assumed.
+本节将已确认能力按建议顺序组织供审阅，不等于启动新阶段。它覆盖旧可选功能顺序，
+不覆盖历史 P3–P7 证据；不推定新排期、界面依赖或响应速度指标。
+
+| Stage / 阶段 | Outcome / 产出 | Exit evidence / 退出证据 |
+|---|---|---|
+| P8 Editing contracts / 编辑需求与契约 | Define tonal-region/color control scope, preview/export semantics, immutable source + parameter model, UI choice and measurable preview targets; exclude current shoulder from formal path / 明确亮度分区和颜色控件范围、预览导出语义、源数据与参数模型、界面选择及可测预览指标；正式路径排除当前肩部 | Reviewed module boundaries, formulas/data states where known, acceptance cases and implementation plan / 模块边界、已确定公式与状态、验收样例及实施计划经审阅 |
+| P9 Exposure interaction / 曝光连续预览最小闭环 | Open once, retain reusable source, change EV repeatedly, update an in-memory preview, reset and export; prevent stale results / 一次打开、保留可复用源数据、连续改 EV、内存预览、复位与导出；防止旧结果覆盖 | No accumulated edits, correct latest result, preview/export agreement, measured latency/memory against P8 targets / 无累积编辑、最新结果正确、预览导出一致、延迟内存满足 P8 指标 |
+| P10 Highlight/output policy / 高光与输出策略复核 | Separate sensor saturation, valid headroom and display clipping; decide current hard-clip retention/replacement; no assumed reconstruction implementation / 区分传感器饱和、有效余量与显示裁剪，决定当前硬裁剪保留或替换，不预定实现高光重建 | Synthetic partial/full saturation + real backlit evidence; source unchanged; output limitations documented / 合成部分与全饱和及真实逆光证据、源不变、输出限制明确 |
+| P11 Tonal-region editing / 亮度分区调整 | Implement agreed regional controls with live preview; controls/formulas specified before code / 实现已确认的分区控件并接入连续预览，先定义控件与公式 | Region selectivity, smooth transitions, neutral setting, composition and visual cases / 分区作用、过渡平滑、中性参数、组合及视觉案例 |
+| P12 Color editing / 颜色调整 | Implement agreed user color controls with live preview, explicit color spaces and stage order / 实现已确认的颜色控件并接入预览，明确色彩空间与顺序 | Neutral settings, hue/saturation behavior as specified, range boundaries, combined edits and skin/neutral/saturated samples / 中性参数、规定色相饱和度行为、范围边界、组合及肤色中性色高饱和样例 |
+| P13 Integrated editor acceptance / 交互编辑综合验收 | Verify exposure + tonal-region + color edits across preview/reset/export; optimize only measured bottlenecks / 综合验证曝光、分区、颜色的预览复位导出，仅优化实测瓶颈 | Numeric, visual, responsiveness, memory and clean build/CI evidence plus Chinese recap / 数值、视觉、响应、内存、干净构建与 CI 证据及中文复盘 |
+
+Order: P7 record reconciliation → P8 → P9 → P10 → P11 → P12 → P13.
+P9 gives later image decisions an interactive inspection surface. P10 precedes
+regional editing so irreversible output clipping does not silently erase the data
+those controls need. Record performance at P9 and later checkpoints, not just P13.
+顺序：P7 记录收尾 → P8 → P9 → P10 → P11 → P12 → P13。先形成交互观察条件，
+再检查高光输出，避免后续分区控件需要的数据被输出裁剪静默丢失。性能从 P9 开始测量，
+并非到 P13 才检查。
+
+Each algorithm stage retains the learning → contract → scalar implementation →
+numeric/visual checks → recap loop. Stage entry rechecks the preceding baseline in
+an isolated workspace; no publication is inferred. Presets/filters, general RAW
+support, GPU/parallel optimization and high-quality reconstruction are not newly
+promised by this ordering.
+每个算法阶段仍遵循学习→契约→标量实现→数值/视觉验证→复盘；进入阶段前在独立工作区
+复核前序基线，不推定发布授权。本顺序不新增承诺预设/滤镜、通用 RAW、GPU/并行优化或
+高质量高光重建。
+
+## Mandatory stage gates / 必须执行的阶段关口 — 2026-09-26
+
+Every independent stage now requires an item-by-item purpose/scenario briefing and
+specific learning plan before user confirmation to begin learning. Choices that
+require learning must return for confirmation afterward, before implementation.
+Stage completion requires an independent external backup with actual restore/hash
+verification. See [stage protocol](../docs/stage-gates-and-backup.md) and AGENTS §9.
+每个独立阶段必须先逐项汇报目的/场景和具体学习计划，用户确认后开始学习；依赖学习
+的选择在学习后、实施前再次确认。阶段完成须有外部独立备份及实际恢复/哈希核对。
+详见流程及 AGENTS 第9节；既有路线不等于授权开始学习或实现。
+
+## Route confirmation and P8 entry audit / 路线确认与 P8 入口检查 — 2026-09-26
+
+The user provisionally accepts P8 → P9 → P10 → P11 → P12 → P13. This supersedes
+the earlier proposed-order status; it does not approve each stage's detailed scope,
+learning or implementation. Current authorization additionally covers P7 publication through merge before P8
+briefing preparation. See [entry audit](p8-entry-audit.md).
+用户暂定采用上述顺序，覆盖此前路线待审阅状态；不等于逐阶段细节、学习或实施确认。
+当前另已授权先完成 P7 发布合并，再准备 P8 汇报，详见入口检查。
+
+P7 recap responses are now recorded, with the evidence-limit correction and remaining
+highlight questions retained. Earlier “responses pending” checkpoints are historical.
+P7 工程检查及实际复盘记录已具备，证据边界纠正及高光疑问保留；此前未回答为历史状态。

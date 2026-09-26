@@ -52,30 +52,26 @@ planning document are kept local-only. See `docs/repository-boundary.md`.
 
 ## Current Status / 当前状态
 
-The Stage 0 build/test skeleton and P2 owned image model are available: a
-static core library, a minimal CLI, GoogleTest/CTest integration, Linux CI,
-and validated Bayer/linear working buffers. Stage 0 acceptance and the separate
-Chinese learning recap are complete; see `tasks/stage0-closeout.md`. P3 now has
-LibRaw ingest and explicit sensor normalization with synthetic tests. Numeric
-integration on three authorized Sony A7C II `.ARW` samples passed; real-sample
-diagnostic previews were inspected and the user accepted a coarse visual check
-on 2026-09-18. Separate P3 learning completion was also user-confirmed. P3 local
-acceptance is complete; P4 entry is described in `tasks/p4-handoff.md`.
+P3–P6 provide RAW ingest/normalization, white balance/demosaic, color conversion,
+sRGB/PNG output, exposure and histogram controls. P5/P6 merged through PR #2/#3.
+P7's recorded-scope acceptance includes a fresh 102/102 local test run, exact-P6-merge
+Linux CI evidence, Release without tests, and actual learner recap; see
+[P7 evidence](tasks/p7-verification-review.md). These checks do not establish a
+complete photographic editor, general RAW support or highlight reconstruction.
+P3–P6 已提供 RAW 读取/归一化、白平衡/去马赛克、色彩转换、sRGB/PNG 输出、曝光和
+直方图能力；P5/P6 已经 PR #2/#3 合并。P7 在已记录范围内完成新本地 102/102、
+精确 P6 合并提交的 Linux CI 复核、关闭测试 Release 及本人复盘，详见综合证据。
+这些检查不证明完整摄影编辑器、通用 RAW 支持或高光重建已经实现。
 
-阶段零构建测试骨架与 P2 owned 图像模型已经可用，包括静态核心库、最小 CLI、
-GoogleTest/CTest 集成、Linux CI，以及经过校验的 Bayer/线性工作 buffer。
-阶段零验收和独立的中文学习复盘已完成，详见 `tasks/stage0-closeout.md`。P3 已有
-LibRaw 读取、显式传感器归一化和合成测试；三张已授权 Sony A7C II `.ARW` 的数值集成
-通过，本地诊断预览已检查，用户于 2026-09-18 确认粗略视觉检查无问题及独立 P3 学习完成。
-P3 本地验收完成，P4 启动交接见 `tasks/p4-handoff.md`。
-
-P4 white balance and scalar bilinear demosaic are implemented locally. Debug and
-ASan/UBSan each pass 58/58 tests; three authorized samples pass full-image numeric
-checks. Separate learning and design are user-confirmed; user coarse visual acceptance passed on 2026-09-19. See [P4 verification](tasks/p4-verification-review.md).
-
-P4 白平衡与标量双线性去马赛克已在本地实现。Debug 及 ASan/UBSan 均通过 58/58
-测试，三张授权样张全图数值检查通过。独立学习及设计已由用户确认，用户粗略视觉验收通过。
-详见 [P4 验证](tasks/p4-verification-review.md)。
+The user provisionally accepted P8 contracts → P9 continuous preview → P10
+highlight/output review → P11 tonal-region editing → P12 color editing → P13
+integrated acceptance. Each stage requires a detailed purpose/learning briefing and
+confirmation before learning. The current P6 shoulder curve remains implemented
+but is provisionally excluded from the future formal photo path. See
+[stage gates and backup](docs/stage-gates-and-backup.md) and [entry audit](tasks/p8-entry-audit.md).
+用户暂定采用 P8 契约→P9 连续预览→P10 高光/输出复核→P11 亮度分区→P12 颜色→
+P13 综合验收。每阶段须先汇报目的及学习细节，经确认后开始学习。当前 P6 肩部实现
+仍保留，但暂不进入未来正式照片路径；详见阶段关口、备份与入口检查。
 
 Key references / 关键文档：
 
