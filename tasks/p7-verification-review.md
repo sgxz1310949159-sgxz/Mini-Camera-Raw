@@ -113,11 +113,13 @@ contact sheets are reduced JPEG views, not full-resolution or calibrated display
 | Backlit / 逆光 | EV -2/0/+2, s0; old/approved/implemented columns; candidate and implementation visually agree; dimmed core is neutral with colored transitions / 三列旧版、确认候选、实现；后两列一致，压暗核心中性但仍有彩色过渡 | Approved candidate retained; historical byte identity recorded; hard clipping is not reconstruction / 保留确认及历史逐字节一致证据，硬裁剪非重建 |
 | Dark / 暗景 | camera-clip, EV -2/0/+2, s0/1; dark shadows, brighter windows, consistent EV response / 阴影暗、窗户亮、曝光变化一致 | Prior coarse acceptance retained; no full-resolution noise/artifact claim / 保留粗验收，不宣称全尺寸噪声/伪影通过 |
 
-No new RAW reads, copies or uploads were needed. No new visual user approval is
+The visual review needed no new RAW reads, copies or uploads. The separately
+authorized external backup includes private originals and remains private. No new visual user approval is
 invented. CFA artifacts, zippering, fine halos, banding and color accuracy are not
 closed by these thumbnails. ADR-009 remains `T(2^EV*M*min(C,1))`; preserve is an
 uncorrected diagnostic branch, not the normal original-image baseline.
-无需新增原片读取、复制或上传；不补造用户确认。缩略图不能关闭 CFA 伪影、拉链纹、
+视觉复核无需新增原片读取、复制或上传；另行授权的外部备份包含私人原片且保持私有。
+不补造用户确认。缩略图不能关闭 CFA 伪影、拉链纹、
 细光晕、断层及色准验收。ADR-009 公式如上，preserve 仅为未修正诊断分支。
 
 ## Completion boundary / 完成边界

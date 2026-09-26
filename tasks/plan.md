@@ -529,9 +529,9 @@ Publication authorization covers P6 only. P7 and broader tone work are subsequen
 
 ## P7 local acceptance / P7 本地综合验收 — 2026-09-25
 
-Scope: verify merged 158647c in this independently created worktree; no algorithm,
-new dependency, publication or Stage 3/4 work. Preserve historical checkpoints.
-范围：在本独立工作区验收已合并 158647c，不修改算法、不加依赖、不发布、不推进阶段三/四；保留历史检查点。
+Initial acceptance scope: verify merged 158647c in this independent worktree; no
+algorithm, new dependency or Stage 3/4 work. Publication was authorized afterward.
+最初验收范围：独立工作区验收已合并 158647c，不改算法、不加依赖、不推进阶段三/四；其后另获发布授权。
 
 1. Baseline: clean initial status, live main equals HEAD and contains P6 merge.
    基线：初始干净，实时 main 与 HEAD 相同且包含 P6 合并。
@@ -552,10 +552,10 @@ new dependency, publication or Stage 3/4 work. Preserve historical checkpoints.
    写双语综合记录及全新忽略的中文复盘，含公式、范围、失效模式和疑问；本人回答及
    反馈现已记录，更广影调观感保持延期而非通过。
 
-Dependencies: 1 → 2 → 3 → 4. Acceptance documents touch plan, todo and one report;
+Dependencies: 1 → 2 → 3 → 4. Closeout also updates public status and stage governance;
 local logs/notes stay ignored. Verify with CTest, git diff --check, git status and
 privacy scan. This is a clean build on an existing host, not a fresh OS install.
-依赖：1 → 2 → 3 → 4。公开修改限计划、清单和一份报告；日志/笔记忽略。
+依赖：1 → 2 → 3 → 4。收尾另更新公开状态及阶段规范；日志/笔记忽略。
 通过 CTest、差异空白检查、git 状态及隐私扫描验证；这是既有主机上的干净构建，不是重装操作系统。
 
 P7 checkpoint: steps 1–3 complete; step 4 materials and evidence review complete,
