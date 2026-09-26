@@ -1,8 +1,8 @@
 # P7 Core Baseline Acceptance / P7 核心基线验收
 
 Date / 日期：2026-09-25
-Status: agreed engineering checks and actual learner recap recorded; P7 publication through merge authorized on 2026-09-26; CI-gated release in progress.
-状态：约定范围工程检查及本人实际复盘已记录；2026-09-26 已授权 P7 发布至合并，按 CI 关口执行。Broader tone appearance remains deferred, not accepted / 更广影调观感延期，不计通过。
+Status: agreed engineering checks and actual learner recap recorded; publication authorized on 2026-09-26; final CI/merge state tracked by [P7 PR #4](https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw/pull/4).
+状态：约定范围工程检查及本人实际复盘已记录；2026-09-26 已授权 P7 发布至合并，最终 CI/合并状态见上述 PR #4。Broader tone appearance remains deferred, not accepted / 更广影调观感延期，不计通过。
 
 ## Baseline and reproducibility / 基线与复现
 

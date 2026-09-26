@@ -42,7 +42,7 @@ P5/P6 总清单和 P7 回答勾选滞后，已同步。P7 复盘要求记录公�
 ## What is still unfinished / 尚未完成事项
 
 1. The user authorized P7 commit/push/PR/merge before the P8 briefing on 2026-09-26.
-   Complete CI-gated publication and a verified final backup. The PR is the final
+   Complete CI-gated publication and a verified final backup. [P7 PR #4](https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw/pull/4) is the final
    publication authority; an independent P8 implementation must start from that
    merged baseline and receive local-only learning material separately.
    用户于 2026-09-26 授权先提交/推送/PR/合并 P7，再汇报 P8。须完成 CI 关口及最终

@@ -5,11 +5,11 @@
 P3–P6 are complete within their recorded acceptance boundaries; P5 and P6 merged
 through PR #2 (`a4130b0`) and PR #3 (`158647c`). P7 engineering checks and actual
 learner recap are complete. The user has authorized P7 commit, push, PR and merge;
-publication must pass CI. Final publication evidence is the P7 PR, and the final
+publication must pass CI. Final publication evidence is [P7 PR #4](https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw/pull/4), and the final
 external restore/hash receipt remains local. See [P7 acceptance](p7-verification-review.md)
 and [P8 entry audit](p8-entry-audit.md).
 P3–P6 在已记录验收边界内完成；P5/P6 已经上述 PR 合并。P7 工程检查及本人实际复盘
-完成；用户已授权 P7 提交、推送、PR 及合并，发布须通过 CI。最终发布证据以 P7 PR
+完成；用户已授权 P7 提交、推送、PR 及合并，发布须通过 CI。最终发布证据以上述 P7 PR #4
 为准，最终外部恢复/哈希凭据保留本地，详见综合验收及入口检查。
 
 Next: P8 detailed briefing, then explicit user confirmation before learning.
