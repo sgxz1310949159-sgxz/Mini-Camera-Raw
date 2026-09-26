@@ -435,3 +435,59 @@ A task is complete only when all applicable items are true:
 - 暂存前检查 diff，确保生成文件和私有材料不进入 commit。
 - commit 信息应聚焦、使用祈使语气，并说明结果和原因。
 - 除非用户明确要求，否则不 push、不创建 release、不修改仓库可见性，也不改写历史。
+
+## 9. Stage Confirmation and Backup Gates / 阶段确认与备份关口
+
+Effective / 生效：2026-09-26, explicit user requirement / 用户明确要求。
+
+Before each independent stage (including preparation/design stages), present a
+stage briefing and wait for explicit user confirmation before beginning its learning.
+A roadmap entry, prior-stage approval or available algorithm is not stage approval.
+每个独立阶段（包括准备/设计阶段）开始前，必须汇报阶段细节，并在用户明确确认后
+才开始该阶段学习。路线条目、前阶段授权或现成算法都不等于本阶段确认。
+
+The briefing must explain each proposed item separately: target user/scenario,
+problem and purpose, expected observable result, why it belongs in this stage,
+input/output and pipeline position, proposed method and alternatives, limitations,
+acceptance evidence, dependencies, and exact inclusions/exclusions. Do not substitute
+an implementation name or formula for its purpose. Distinguish confirmed requirements
+from proposals and unresolved choices.
+汇报必须逐项说明目标用户/场景、要解决的问题与目的、预期可观察效果、为何本阶段
+需要它、输入输出与流水线位置、拟用方法与备选、限制、验收证据、依赖及做/不做边界。
+不能用方法名称或公式代替目的，区分已确认要求、建议及未决选择。
+
+List the concrete learning topics, prerequisites, explanatory examples/exercises,
+and the decisions each topic enables. After scope/learning-plan confirmation,
+teach and verify understanding. Decisions requiring that learning remain explicitly
+pending; afterward explain alternatives and effects and obtain user confirmation
+before implementing dependent work. Learning approval is not formula/API/UI/dependency
+or implementation approval. If scope changes, update the affected briefing and
+confirm it again; do not silently add an algorithm to satisfy a stage label.
+列出具体学习主题、前置知识、讲解例子/练习，以及每项知识支持什么决策。阶段范围与
+学习计划确认后才教学及核验。依赖学习的决定必须标记待定，学习后解释备选与影响，
+经用户确认后才实施相关工作。学习确认不等于公式/API/界面/依赖或实施确认。范围变化
+须更新相关汇报并再次确认，不得为凑阶段名称静默加入算法。
+
+At every stage closeout, create an independent backup on the agreed external
+medium. Include Git history, current committed/uncommitted files, local ignored
+rules and learning, and necessary original/validation evidence within the authorized
+scope. Inventory all worktrees and the shared Git directory: a worktree's .git pointer
+alone cannot restore its history. List exclusions and never override private-source
+copy restrictions without explicit authorization.
+每阶段结束时在约定外部介质完成独立备份，按授权范围覆盖 Git 历史、当前已提交/未提交
+文件、本地忽略规则和学习、必要原始/验收证据。清点所有工作区与共享 Git 目录，只有
+worktree 的 .git 指针无法恢复历史。明确排除项，不得未经明确授权绕过私人源文件复制限制。
+
+Use unique dated snapshots without overwriting earlier backups. Record source
+paths/revisions, file inventory, SHA-256 hashes and archive hash; restore into a
+temporary directory and compare restored files against the manifest. Check source
+stability and Git recoverability. Store a local ignored receipt and a receipt next
+to the external archive. A successful copy, clean git status, GitHub push or in-project
+snapshot is not independent backup verification. If media/scope/verification is
+blocked, report it and leave backup/stage closure pending. No automatic deletion,
+formatting, upload or Git publication is authorized by this rule.
+使用带时间且不覆盖旧备份的快照，记录源路径/版本、文件清单、SHA-256 和归档哈希；
+恢复到临时目录逐文件核对，检查源稳定性和 Git 可恢复性。外部归档旁及本地忽略目录
+各留凭据。复制成功、git 干净、推送 GitHub 或项目内快照均不等于独立备份验证。
+介质/范围/校验受阻须明确报告，保持备份及阶段关闭待完成。本规则不授权自动删除、
+格式化、上传或 Git 发布。Detailed protocol / 具体流程：docs/stage-gates-and-backup.md。

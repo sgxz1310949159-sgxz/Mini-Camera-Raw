@@ -1,5 +1,32 @@
 # Task Checklist / 任务清单
 
+## Current checkpoint / 当前检查点 — 2026-09-26
+
+P3–P6 are complete within their recorded acceptance boundaries; P5 and P6 merged
+through PR #2 (`a4130b0`) and PR #3 (`158647c`). P7 engineering checks and actual
+learner recap are complete. The user has authorized P7 commit, push, PR and merge;
+publication must pass CI. Final publication evidence is the P7 PR, and the final
+external restore/hash receipt remains local. See [P7 acceptance](p7-verification-review.md)
+and [P8 entry audit](p8-entry-audit.md).
+P3–P6 在已记录验收边界内完成；P5/P6 已经上述 PR 合并。P7 工程检查及本人实际复盘
+完成；用户已授权 P7 提交、推送、PR 及合并，发布须通过 CI。最终发布证据以 P7 PR
+为准，最终外部恢复/哈希凭据保留本地，详见综合验收及入口检查。
+
+Next: P8 detailed briefing, then explicit user confirmation before learning.
+Provisional order: P8 contracts → P9 continuous preview → P10 highlight/output
+review → P11 tonal regions → P12 color → P13 integrated acceptance. The current
+P6 shoulder is excluded from the future formal path; existing code/tests are retained.
+下步先汇报 P8 细节，用户明确确认后才开始学习。暂定顺序：P8 契约→P9 连续预览→
+P10 高光/输出复核→P11 亮度分区→P12 颜色→P13 综合验收。当前 P6 肩部暂不进入
+未来正式路径，现有代码和测试保留。
+
+Earlier dated sections below are historical checkpoints, not the current backlog.
+Unchecked optional/conditional items are not silently accepted; future stage scope
+must be confirmed separately. Stage gates and verified backups are mandatory.
+下方较早日期段落为历史检查点，不代表当前待办。未勾选的可选/条件性事项不计通过，
+后续阶段范围须单独确认；阶段关口和验证备份为必做要求。
+
+
 Status / 状态：Active / 进行中
 
 ## Preparation / 准备
@@ -51,15 +78,15 @@ Acceptance evidence: [Stage 0 closeout and P3 handoff](stage0-closeout.md), 2026
 
 - [x] P3 RAW ingest and sensor normalization (local acceptance, 2026-09-18).
 - [x] P4 white balance and bilinear demosaic (local acceptance, 2026-09-19).
-- [ ] P5 color transform, display encoding, and file output.
-- [ ] P6 exposure, histogram, and one tone curve.
-- [ ] P7 reproducibility, numeric, visual, and learning acceptance.
+- [x] P5 color transform, display encoding, and file output.
+- [x] P6 exposure, histogram, and one tone curve.
+- [x] P7 reproducibility, numeric, visual, and learning acceptance (recorded scope).
 
 - [x] P3 RAW 读取与传感器归一化（本地验收，2026-09-18）。
 - [x] P4 白平衡与双线性去马赛克（本地验收，2026-09-19）。
-- [ ] P5 色彩转换、显示编码与文件输出。
-- [ ] P6 曝光、直方图与一种影调曲线。
-- [ ] P7 可复现性、数值、视觉与学习验收。
+- [x] P5 色彩转换、显示编码与文件输出。
+- [x] P6 曝光、直方图与一种影调曲线。
+- [x] P7 可复现性、数值、视觉与学习验收（已记录范围）。
 
 ## P3 Checkpoints / P3 检查点
 
@@ -226,7 +253,7 @@ CI succeeds. Private images, learning and build artifacts remain local.
 P5 源码、测试、构建配置与双语文档，远端 CI 通过后合并；私人图像、学习及构建产物
 保持本地。
 
-## P6 Active Checkpoint / P6 当前检查点 — 2026-09-25
+## P6 Historical Checkpoint / P6 历史检查点 — 2026-09-25
 
 - [x] Clean isolated HEAD and live main both a4130b0 / 干净独立 HEAD 与实时 main 均为 a4130b0。
 - [x] Fresh Debug configure/build and 76/76 tests / 新建 Debug 配置、编译及 76/76 测试。
@@ -277,3 +304,47 @@ This is not visual acceptance. See [diagnosis](p6-highlight-regression-check.md)
 
 Final merge state is tracked by [PR #3](https://github.com/sgxz1310949159-sgxz/Mini-Camera-Raw/pull/3); every final head must pass CI before merge.
 最终合并状态以 PR #3 为准；最终提交必须通过 CI 才合并。
+
+## P7 local acceptance / P7 本地综合验收 — 2026-09-25
+
+- [x] Independent clean worktree and live main/P6 merge identity / 独立干净工作区、实时 main 与 P6 合并一致。
+- [x] Fresh Debug configure/build/full CTest and no-tests Release / 新 Debug 全套及关闭测试 Release。
+- [x] Exact-SHA Linux CI and per-stage numeric evidence / 精确 SHA Linux CI 与逐阶段数值证据。
+- [x] Category visual records with accepted/deferred boundaries / 分类视觉记录及已接受/延期边界。
+- [x] Chinese recap material and final evidence review / 中文复盘材料与最终证据检查。
+- [x] Learner's own P7 recap responses / 学习者本人 P7 复盘回答。
+
+Evidence / 证据：[P7 consolidated acceptance / P7 综合验收](p7-verification-review.md).
+
+## Required future editing capabilities / 后续必做编辑能力 — 2026-09-26
+
+- [ ] Specify and implement tonal-region adjustments / 定义并实现亮度分区调整。
+- [ ] Specify and implement user-controlled color adjustments / 定义并实现用户可控颜色调整。
+- [ ] Specify and implement continuous interactive preview / 定义并实现连续交互预览。
+- [x] Provisionally exclude the P6 shoulder from the future formal path; retain reference code / 暂定 P6 肩部不进入未来正式路径，保留参考代码。
+
+Requirements are confirmed; detailed designs, schedule and implementation are not.
+要求已确认；详细设计、排期与实施尚未确定。See [project foundation](../docs/project-foundation.md).
+
+### Post-P7 roadmap proposal / P7 后路线建议 — 2026-09-26
+
+- [x] Record user decision: current P6 shoulder stays outside the formal photo path / 记录用户决定：当前 P6 肩部暂不进入正式照片路径。
+- [ ] P8: review editing contracts and scope / 审阅编辑契约及范围。
+- [ ] P9: minimal continuous exposure preview / 曝光连续预览最小闭环。
+- [ ] P10: highlight and output policy review / 高光与输出策略复核。
+- [ ] P11: tonal-region adjustments / 亮度分区调整。
+- [ ] P12: color adjustments / 颜色调整。
+- [ ] P13: integrated interactive acceptance / 交互综合验收。
+
+The user provisionally accepted this order; stages are not started. Earlier curve-retention
+question is superseded for the formal path; physical code removal remains undecided.
+用户暂定采用此顺序，阶段尚未启动。此前曲线去留问题在正式路径范围内已由新决定覆盖，
+是否物理删除实现仍未确定。
+
+## Stage governance and initial backup / 阶段规范与首次备份 — 2026-09-26
+
+- [x] Record purpose-first briefing, pre-learning confirmation and post-learning decision gates / 记录目的优先汇报、学习前确认及学习后决策关口。
+- [x] Inspect FirstLight's actual archive/restore/hash workflow read-only / 只读核对 FirstLight 实际归档、恢复与哈希流程。
+- [x] Confirm external destination and private RAW scope / 确认外部位置及私人 RAW 范围。
+- [x] Initial project/worktree backup with source stability, restore and Git verification / 首次项目及工作区备份，核对源稳定性、恢复与 Git。
+- [ ] Every future stage: briefing confirmation, learning, later decisions, implementation/acceptance, then verified backup / 后续每阶段：汇报确认、学习、后续决策、实施验收及备份验证。
