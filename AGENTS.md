@@ -1,392 +1,140 @@
-# Agent Working Agreement / Agent 工作规范
+# Agent 工作规范
 
-This file applies to the entire repository. It defines how an agent should
-plan, implement, verify, review, and publish work for Mini-Camera Raw.
+本文件适用于 Mini-Camera Raw 全仓库。项目以 RAW、ISP、DSP 原理学习及可靠的 C++ 实现为主；功能数量服从正确性、可解释性、可测试性和可复现性。
 
-本文件适用于整个仓库，用于规定 Agent 在 Mini-Camera Raw 中如何规划、实现、验证、审查和发布工作。
+项目内约束优先级：用户最新要求、本文件、当前阶段规格、其他项目文档、可选 skill 建议。系统及开发者指令仍按其优先级执行。发生影响结果的冲突时明确说明，不隐瞒、不扩大授权。
 
-## 1. Project Purpose / 项目目标
+## 1. 任务启动与工作区
 
-Mini-Camera Raw is a learning-first C++ image-processing project. The primary
-goal is to understand RAW data, ISP pipeline algorithms, digital image signal
-processing, numerical behavior, and engineering practice. Shipping many
-features is less important than making each stage correct, explainable,
-testable, and reproducible.
-
-Mini-Camera Raw 是一个以学习为首要目标的 C++ 图像处理项目。核心目标是理解 RAW 数据、ISP
-流水线算法、数字图像信号处理、数值行为和工程实践。功能数量不是首要指标；每个阶段都应做到正确、
-可解释、可测试、可复现。
-
-Before changing code, read the relevant parts of:
+- 非简单任务先运行 `git status --short --branch`，保留既有修改，确认当前工作区、分支和基线。
 
-修改代码前，应阅读与当前任务相关的以下文件：
+- 按任务需要阅读 `docs/project-foundation.md`、当前阶段规格、`docs/early-risk-register.md`、`docs/repository-boundary.md` 和 `tasks/` 当前计划；不为流程完整而重复读取全部文档。
 
-- `docs/project-foundation.md`: project positioning, roadmap, and learning loop
-- `docs/stage0-engineering-spec.md` or the active stage specification
-- `docs/early-risk-register.md`: current risks, warning signs, and mitigations
-- `docs/repository-boundary.md`: public and local-only content rules
-- the current task plan under `tasks/`, when it exists
+- 说明影响结果的假设、未决选择和范围；在既有授权内自主处理低风险细节。
 
-- `docs/project-foundation.md`：项目定位、路线图和学习闭环
-- `docs/stage0-engineering-spec.md` 或当前阶段规格
-- `docs/early-risk-register.md`：当前风险、预警信号和应对措施
-- `docs/repository-boundary.md`：公开内容与仅本地内容的边界
-- `tasks/` 下当前任务计划（如果存在）
+- 实施前明确可检验的结果。多步骤任务维护一个有效计划与清单，避免多个文件重复维护同一状态。
 
-When instructions conflict, use this order: the user's latest request, this
-file, the active stage specification, other project documents, then generic
-skill defaults. Surface any material conflict before proceeding.
+- 独立阶段从核实的已提交基线开展工程工作。已有合适的隔离工作区应复用；新建任务或工作区不意味着可以改动旧主目录或其他任务的未提交内容。
 
-发生冲突时，优先级依次为：用户最新要求、本文件、当前阶段规格、其他项目文档、通用 skill
-默认规则。若冲突会影响结果，应先明确指出。
-
-## 2. Repository Boundaries / 仓库边界
+## 2. 文档语言与公开边界
 
-- Keep all personal study notes under `learning/`. They must be written in
-  Chinese and must remain ignored by git.
-- Public documents must provide equivalent Chinese and English content.
-- Do not commit personal RAW photos, the original planning document, large
-  outputs, local benchmark results, build products, credentials, or private
-  reflections.
-- Synthetic fixtures and redistributable samples may be committed when their
-  source and license are clear.
-- Promote a learning note into `docs/` only after rewriting it as polished,
-  reproducible public documentation.
-
-- 所有个人学习笔记都放在 `learning/` 下，必须使用中文，并始终保持 git 忽略状态。
-- 公开文档必须提供内容等价的中文和英文版本。
-- 不提交私人 RAW 照片、原始策划书、大型输出、本地 benchmark 结果、构建产物、凭据或私人反思。
-- 只有来源和许可证清楚时，才可提交合成测试数据或允许再分发的样张。
-- 学习笔记只有在重写为成熟、可复现的公开资料后，才能整理进入 `docs/`。
+- 自 2026-09-26 本次用户修订起，新增及后续维护的项目记录使用中文，不再要求中英双语。
 
-## 3. Start-of-Task Protocol / 每次任务的启动流程
+- 现有成对的双语标题、段落、列表及表格只保留中文表达；英文中独有的公式、参数、版本、证据、命令和链接必须保留，不能因中文写着“如上”而删失。
 
-For every non-trivial task:
+- 原有只有英文或只有中文的内容保持原状；接口名、标识符、路径、代码、原始日志、来源名称与许可证不作机械翻译。必要的规则修订以本次明确要求为准。
 
-每次开始非简单任务时：
-
-1. Run `git status --short --branch` and preserve all pre-existing user changes.
-2. Read the active specification and only the source files needed for the task.
-3. Check the available skills and invoke every skill whose trigger clearly
-   matches the work. Do not invoke unrelated skills for appearance.
-4. State material assumptions, unresolved decisions, and scope boundaries.
-   Proceed without blocking on low-risk details that have a conservative
-   project-consistent default.
-5. Define or confirm testable acceptance criteria before implementation.
-6. For multi-step work, maintain an explicit plan and update it as checkpoints
-   are completed.
+- 个人学习笔记、问答及实验放在 Git 忽略的 `learning/`，使用中文。只有整理为可复现工程资料后才进入 `docs/`。
 
-1. 运行 `git status --short --branch`，保留所有任务开始前已经存在的用户修改。
-2. 阅读当前规格，以及完成任务真正需要的源文件。
-3. 检查当前可用 skill；凡是触发条件明确匹配的都要调用，但不要为了形式调用无关 skill。
-4. 说明会影响结果的假设、未决问题和范围边界。对风险低且存在保守默认值的细节，按项目现有约定继续推进。
-5. 实现前定义或确认可测试的验收标准。
-6. 多步骤任务应维护明确计划，并在每个检查点完成后及时更新状态。
+- 私人 RAW、原始策划书、大型输出、本地 benchmark 结果、构建产物、凭据和私人反思不提交。
 
-## 4. Required Skill Routing / 必须执行的 Skill 路由
+- 合成或可再分发的小样本只有来源、许可证清楚时可提交；派生预览发布前检查画面和元数据。
 
-### `using-agent-skills`
+- 历史 ADR、验收证据和旧工作区不因语言调整而改写 Git 历史。保留决策和证据的时间、范围及已知限制。
 
-Use at the beginning of a substantial or unfamiliar task to identify the
-smallest applicable skill set and execution order.
+## 3. 窗口、消息和模型
 
-在重大任务或不熟悉的任务开始时使用，用于确定最小必要 skill 集合及执行顺序。
+- 只有用户明确要求开启新窗口/任务或推进学习，才执行对应的新建、教学交接或学习启动消息。授权只覆盖用户指定的对象与动作，不扩展为持续互相发消息。
 
-### `spec-driven-development`
+- 不主动请求其他任务汇报进度，不发送例行状态同步、催办、重复交接或自动回复；收到其他任务消息本身不构成回复授权。不把“协作”“阶段交接”解释为可自主互发消息。
 
-Use for a new project stage, ISP algorithm, public API, data model, dependency,
-architecture decision, or any feature whose requirements or acceptance
-criteria are unclear. Update the specification before implementation. A useful
-algorithm specification records:
+- 可按任务需要只读查看已保存的学习进度或其他任务记录；以文件记录供后续读取，不能为同步记录另发消息或另起回合。
 
-新阶段、新 ISP 算法、公开 API、数据模型、新依赖、架构决策，或需求与验收标准不清晰的功能，
-必须使用。先更新规格，再实现。算法规格至少记录：
+- 一次明确的学习推进请求只发送一条完整、必要的课堂指令；工程任务不得再补发同内容或进度请求。
 
-- purpose and pipeline position
-- input/output color state, CFA pattern, bit depth, numeric range, and units
-- formula or reference algorithm and assumptions
-- boundary behavior, clipping policy, and error handling
-- numeric tolerance, visual checks, and performance expectations
+- Mini-Camera Raw 的既有“学习课堂”固定使用 **GPT-6 Sol**（`gpt-6-sol`）。用户明确修改前不得更换。模型变更必须限定到用户指定的任务；“新窗口用某模型”不适用于已有课堂。
 
-- 目的及其在流水线中的位置
-- 输入/输出色彩状态、CFA 排列、位深、数值范围和单位
-- 公式或参考算法及其前提
-- 边界行为、裁剪策略和错误处理
-- 数值容差、视觉检查和性能预期
+- 当前 P8 工程任务使用 **GPT-6 Astra**（`gpt-6-astra`）、推理强度 **medium**。不把这一设置推及其他任务。未指定的推理强度保持既有值，不自行改动。
 
-Skip a full specification for typo-only, formatting-only, or obviously
-self-contained one-line changes; still retain a concise acceptance criterion.
+- 本次纠正明确作废此前向课堂发送的两条 P8 消息及其中的互发进度授权。保留此前真实已完成学习记录，但中断回合不算学习通过。
 
-纯拼写、格式或边界完全明确的单行修改不需要完整规格，但仍应有简短验收条件。
+## 4. 阶段确认与学习闭环
 
-### `source-driven-development`
+每个独立阶段（含设计/准备阶段）先汇报，再由用户确认学习范围。路线已定、前一阶段通过或现成算法可用，都不等于新阶段获准。
 
-Use whenever work depends on LibRaw, CMake, OpenCV, a test framework, a file
-format, a compiler feature, or another versioned external API. Detect the
-actual version, read the precise official documentation, implement the
-documented pattern, and cite the source. For ISP algorithms, extend the source
-hierarchy with original papers, standards, and authoritative color-science
-references. Clearly label any claim that could not be verified.
+汇报逐项解释：谁在什么场景需要、要解决的问题、预期图像或交互结果、为何放在本阶段、输入输出及流水线位置、备选方法与代价、限制、依赖、做与不做的边界、验收证据。不能只报方法名或公式。
 
-工作依赖 LibRaw、CMake、OpenCV、测试框架、文件格式、编译器特性或其他带版本的外部 API 时必须
-使用。先确定实际版本，再阅读准确的官方文档，按文档实现并记录来源。对于 ISP 算法，还应优先查阅
-原始论文、标准和权威色彩科学资料。无法验证的结论必须明确标记。
+列出具体学习内容、前置知识、例子/练习及其支持的决策。经确认后按中文连续知识链小步讲解、练习、等待本人回答、反馈并记录真实进度。阶段开始批准不等于公式、API、界面、依赖或实施已批准。
 
-### `planning-and-task-breakdown`
+依赖学习的选择保持待定；学习后解释选项与影响，由用户明确确认再实施。变更范围时更新受影响汇报并确认，不能为凑阶段名称加入未经认可的算法。教学与工程任务各维护自己的记录，按第3节限制跨窗口消息。
 
-Use after an approved specification when implementation order is non-obvious,
-the change spans multiple modules, or the work is too large for one focused
-session. Store the implementation plan in `tasks/plan.md` and the actionable
-checklist in `tasks/todo.md`. Prefer tasks touching no more than about five
-files, with explicit dependencies, acceptance criteria, and verification
-commands.
-
-规格确认后，如果实现顺序不明显、修改跨多个模块，或工作无法在一次专注会话中完成，必须使用。
-将实施计划写入 `tasks/plan.md`，可执行清单写入 `tasks/todo.md`。单个任务尽量不超过约五个
-文件，并明确依赖、验收条件和验证命令。
-
-### `api-and-interface-design`
+算法阶段的实质闭环：学习原理 → 明确契约 → 清晰的标量参考实现 → 确定性数值验证 → 合成及授权真实样张检查 → 对照结果、记录失效和复盘。优化前建立固定输入性能基线，再把优化输出对照参考实现；不要求为了形式给每次小改动重新走全部步骤。
 
-Use before introducing or changing a public header, `ImageBuffer`, pixel
-format, metadata type, processing-stage contract, error policy, or ownership
-boundary. Define the contract before implementation. Make invalid states hard
-to represent, validate external data at the boundary, keep error semantics
-consistent, and prefer additive evolution over breaking changes.
-
-新增或修改公开头文件、`ImageBuffer`、像素格式、元数据类型、处理阶段契约、错误策略或所有权边界
-前必须使用。先定义契约，再实现。应尽量让非法状态难以表达，在外部数据边界进行校验，保持错误语义
-一致，并优先采用增量扩展而不是破坏性修改。
-
-### `incremental-implementation`
-
-Use for every multi-file implementation. Work in the smallest complete slices:
-implement, test, verify, review the diff, then continue. Keep the repository
-buildable between slices. Do not mix unrelated cleanup, refactoring, and new
-behavior. Keep each slice commit-ready; create commits or push only when the
-user requests publication or the active task explicitly includes it.
-
-所有多文件实现都必须使用。按最小完整增量推进：实现、测试、验证、审查 diff，然后继续。每个增量
-结束时仓库都应可构建。不要把无关清理、重构和新行为混在一起。每个增量应保持可独立提交；只有
-用户要求发布，或当前任务明确包含提交/推送时，才创建 commit 或 push。
-
-### `test-driven-development`
-
-Use for new logic, changed behavior, and bug fixes. Follow red, green,
-refactor. A bug fix starts with a minimal failing reproduction test. Prefer
-tests of observable inputs and outputs over implementation details.
-
-新增逻辑、行为修改和缺陷修复必须使用，遵循红灯、绿灯、重构。修复缺陷时先写能够稳定复现问题的
-最小失败测试。优先验证可观察的输入输出，不绑定内部实现细节。
-
-For image algorithms, tests should cover representative examples, empty or
-invalid inputs, minimum and maximum values, clipping boundaries, odd image
-dimensions, CFA phase where relevant, NaN/Inf handling for floating-point
-paths, and tolerance-based comparison.
-
-图像算法测试应覆盖代表性示例、空或非法输入、最小值和最大值、裁剪边界、奇数图像尺寸、相关时的
-CFA 相位、浮点路径的 NaN/Inf 处理，以及基于容差的比较。
-
-### `property-based-testing`
-
-Use when an image transform has useful mathematical properties or a large
-input domain. High-value properties for this project include identity at
-neutral parameters, output range preservation, monotonicity, idempotence,
-round trips, equivalence to a simple reference implementation, and invariance
-under valid layout changes. Start with deterministic generated cases; add a
-library such as RapidCheck only after dependency review and approval.
-
-当图像变换具有明确数学性质或输入域很大时使用。本项目重点性质包括：中性参数下恒等、输出范围
-保持、单调性、幂等性、往返转换、与简单参考实现等价，以及合法内存布局变化下的不变量。优先从
-确定性生成样例开始；RapidCheck 等新依赖必须经过审查和确认后才能加入。
-
-Do not use property-based testing as a replacement for known reference vectors
-or visual validation.
-
-性质测试不能替代已知参考向量或视觉验证。
-
-### `debugging-and-error-recovery`
-
-Invoke immediately when a build, test, benchmark, or runtime result is
-unexpected. Stop feature work, preserve the exact evidence, reproduce,
-localize, reduce, fix the root cause, add a regression guard, and rerun the
-relevant end-to-end path. Never silence a failing test or weaken a tolerance
-without explaining why the original expectation was wrong.
-
-构建、测试、benchmark 或运行结果出现异常时立即使用。暂停功能开发，保留完整证据，依次完成复现、
-定位、最小化、根因修复、回归保护和相关端到端验证。不得通过屏蔽失败测试或随意放宽容差来“修复”
-问题，除非能够说明原预期为何错误。
-
-### `code-review-and-quality`
-
-Use after each completed implementation task and before every merge. Review
-tests first, then inspect correctness, readability, architecture, security,
-and performance. For ISP code, additionally check color-space ordering,
-numeric precision, overflow, clipping, row stride, ownership, cache behavior,
-and accidental per-pixel allocation. Report findings by severity with exact
-file and line references. If there are no findings, state the remaining test
-or benchmark gaps.
-
-每个实现任务完成后以及每次合并前必须使用。先审查测试，再检查正确性、可读性、架构、安全性和
-性能。ISP 代码还要检查色彩空间顺序、数值精度、溢出、裁剪、行跨度、所有权、缓存行为和意外的
-逐像素内存分配。发现应按严重程度排序，并给出准确文件与行号；若没有问题，应说明仍存在的测试
-或 benchmark 缺口。
-
-### `documentation-and-adrs`
-
-Use when choosing a major dependency, image representation, color-space
-convention, numeric precision, pipeline order, public API, optimization
-strategy, or other decision that would be expensive to reverse. Store
-bilingual ADRs under `docs/decisions/` using sequential names such as
-`ADR-001-image-buffer-layout.md`. Record context, decision, alternatives,
-consequences, status, and date. Never delete an accepted ADR; supersede it with
-a new record.
-
-选择重要依赖、图像表示、色彩空间约定、数值精度、流水线顺序、公开 API、优化策略，或其他难以
-回退的决策时必须使用。中英双语 ADR 放在 `docs/decisions/` 下，按
-`ADR-001-image-buffer-layout.md` 形式连续编号，并记录背景、决策、备选方案、后果、状态和日期。
-已经接受的 ADR 不删除；若决策变化，应由新 ADR 替代。
-
-### `jupyter-notebook`
-
-Use for exploratory DSP/ISP derivations, plots, histogram experiments,
-synthetic signal generation, and teaching walkthroughs. Notebooks belong under
-`learning/experiments/`, remain local-only, and use Chinese Markdown
-explanations. Scaffold them with the skill helper instead of hand-editing
-notebook JSON, keep cells small and deterministic, clear large outputs, and run
-the notebook top-to-bottom before calling it complete. Production algorithms
-must still be implemented and tested in C++; a notebook is evidence and a
-learning tool, not the product implementation.
-
-DSP/ISP 推导、曲线绘制、直方图实验、合成信号生成和教学式演示应使用该 skill。Notebook 放在
-`learning/experiments/` 下，仅本地保留，Markdown 说明全部使用中文。使用 skill 自带脚手架，
-不要手写 notebook JSON；单元格保持小而确定，清理大型输出，并在完成前从头到尾运行。正式算法
-仍必须在 C++ 中实现和测试；notebook 是实验依据和学习工具，不是产品实现。
-
-### Optional Security Skills / 可选安全 Skill
-
-- Use `differential-review` for security-sensitive diffs involving untrusted
-  file parsing, unsafe memory, dependency updates, public APIs, or validation
-  removal. It is not required for greenfield documentation or routine numeric
-  algorithms.
-- Use `c-review` after a meaningful C/C++ surface exists and before treating
-  untrusted RAW/file input as robust. Invoke it for focused security audits of
-  memory ownership, bounds, integer arithmetic, races, and platform behavior.
-  Agree on scope, threat model, worker model, and severity filter first. Keep
-  `.c-review-results/` local and treat partial worker coverage as an incomplete
-  audit.
-- Use `semgrep` only for an explicitly requested static/security audit and only
-  after presenting its exact scan plan for approval. Always disable telemetry
-  with `--metrics=off`. Do not make it a routine per-commit requirement.
-
-- 当 diff 涉及不可信文件解析、不安全内存、新依赖、公开 API 或移除校验时，使用
-  `differential-review`。新建文档或普通数值算法不需要例行使用。
-- 当项目已经形成有意义的 C/C++ 代码面，并准备把不可信 RAW/文件输入视为可靠支持对象时，使用
-  `c-review`。重点审计内存所有权、边界、整数运算、并发和平台行为。执行前先确认范围、威胁模型、
-  worker 模型和严重级别过滤器。`.c-review-results/` 仅本地保留；任何 worker 覆盖不完整都意味着
-  审计尚未完成。
-- 只有明确要求静态分析或安全审计时才使用 `semgrep`，并且必须先展示准确扫描计划并取得确认。
-  所有扫描都要使用 `--metrics=off` 关闭遥测，不把它设为每次提交的固定步骤。
-
-### GitHub Workflow Skills / GitHub 工作流 Skill
-
-- Use `github:github` to inspect current remote repository, issue, or pull
-  request context.
-- Use `github:gh-fix-ci` when GitHub Actions checks fail.
-- Use `github:gh-address-comments` when resolving pull request review threads.
-- Use `github:yeet` only when the user explicitly asks to publish local changes
-  through a branch, push, and draft pull request.
-
-- 使用 `github:github` 检查远端仓库、issue 或 pull request 的当前上下文。
-- GitHub Actions 检查失败时使用 `github:gh-fix-ci`。
-- 处理 pull request 审查意见时使用 `github:gh-address-comments`。
-- 只有用户明确要求通过分支、push 和 draft pull request 发布本地修改时，才使用
-  `github:yeet`。
-
-### Skills Not on the Current Critical Path / 当前主线不使用的 Skill
-
-Do not invoke React, Vercel, web-design, browser-testing, image-generation, or
-pet/asset skills while the project remains a C++ CLI/library and algorithm
-learning project. Re-evaluate them only if a web UI, hosted service, or visual
-asset deliverable enters an approved specification. Use document skills only
-when editing or generating `.docx`/PDF artifacts.
-
-项目仍是 C++ CLI/库和算法学习项目时，不调用 React、Vercel、Web 设计、浏览器测试、图像生成或
-宠物/素材类 skill。只有经确认的规格加入 Web UI、托管服务或视觉资产交付物后才重新评估。仅在
-编辑或生成 `.docx`/PDF 文档时使用文档类 skill。
-
-Whenever skills are installed, removed, or upgraded, re-check this routing
-section. Do not make an unavailable skill mandatory, and do not let a newly
-installed relevant skill remain undocumented.
-
-每次安装、移除或升级 skill 后，都要重新检查本节。不要把不可用的 skill 设为必用项，也不要让新安装
-且与项目相关的 skill 长期处于未记录状态。
-
-## 5. ISP Learning and Implementation Loop / ISP 学习与实现闭环
-
-Every new processing stage should follow this order:
-
-每个新处理阶段都按以下顺序推进：
-
-1. Study the physical or mathematical principle and write Chinese notes under
-   `learning/`.
-2. Write or update the public bilingual design specification.
-3. Create a scalar, single-threaded reference implementation with explicit
-   metadata and numeric ranges.
-4. Write deterministic numeric tests and, when valuable, property tests.
-5. Run the stage on synthetic patterns and a legally usable real sample.
-6. Compare numeric outputs, histograms, and before/after images; record the
-   observed failure modes.
-7. Establish a fixed-input benchmark before optimizing.
-8. Optimize only after correctness is stable, and verify optimized output
-   against the reference implementation.
-
-1. 学习物理或数学原理，并在 `learning/` 下用中文记录。
-2. 编写或更新公开的中英双语设计规格。
-3. 编写标量、单线程参考实现，显式记录元数据和数值范围。
-4. 编写确定性数值测试，并在有价值时加入性质测试。
-5. 使用合成图案和合法可用的真实样张运行该阶段。
-6. 比较数值输出、直方图和前后图像，记录观察到的失效模式。
-7. 优化前先建立固定输入的性能基线。
-8. 只有正确性稳定后才优化，并将优化结果与参考实现对照验证。
-
-Do not merge an algorithm that is supported only by a visually pleasing
-example. Visual quality is necessary but is not numerical proof.
-
-不要合并仅凭“看起来不错”的样例支撑的算法。视觉质量很重要，但它不能替代数值证明。
-
-## 6. C++ and Dependency Rules / C++ 与依赖规则
-
-- Use C++17 unless an approved specification changes the standard.
-- Keep the core library independent from UI frameworks.
-- Prefer explicit ownership and standard containers in the initial design.
-- Make pixel format, color state, numeric range, and row layout explicit at API
-  boundaries.
-- Prefer clear scalar code before SIMD, OpenMP, or Metal implementations.
-- Avoid hidden color-space conversion, implicit clipping, unchecked integer
-  arithmetic, and unnecessary copies.
-- Before adding a dependency, check whether the standard library or current
-  stack is sufficient, then review maintenance status, license, platform
-  support, binary/build cost, and known vulnerabilities.
-- Consult official documentation or primary papers for algorithm and API
-  claims. Record citations in public design documents where they affect a
-  technical decision.
-
-- 除非已确认的规格修改标准，否则使用 C++17。
-- 核心库保持独立，不依赖 UI 框架。
-- 初始设计优先使用显式所有权和标准容器。
-- 在 API 边界显式表达像素格式、色彩状态、数值范围和行布局。
-- 先写清晰的标量实现，再考虑 SIMD、OpenMP 或 Metal。
-- 避免隐藏的色彩空间转换、隐式裁剪、未检查的整数运算和不必要拷贝。
-- 添加依赖前先确认标准库或现有技术栈是否足够，再检查维护状态、许可证、平台支持、二进制/构建
-  成本和已知漏洞。
-- 算法和 API 结论应查阅官方文档或原始论文；如果资料影响技术决策，应在公开设计文档中记录引用。
-
-## 7. Verification and Definition of Done / 验证与完成标准
-
-Use the commands defined by the active stage specification. Once the CMake
-baseline exists, the normal local verification sequence is:
-
-使用当前阶段规格定义的命令。CMake 工程底座建立后，常规本地验证顺序为：
+当前后续顺序暂定 P8→P9→P10→P11→P12→P13。亮度分区调整、颜色调整和连续预览为必做能力。当前 P6 肩部暂不进入未来正式照片处理路径，参考实现与测试保留；硬裁剪不能冒称高光重建。
+
+## 5. Skill 使用：按价值选用，不作为能力前提
+
+默认直接分析、设计、实现和验证，不要求先读取或调用 skill。下表是本项目的使用判断，不卸载或改写已安装 skill，也不覆盖上层工具指令。用户显式点名某 skill 时按请求使用；不可用则说明并采用适当替代，不为一个流程名阻塞可完成工作。
+
+选择标准：它是否提供当前缺少的专业知识、可靠脚本、特殊工具协议或能降低实际风险的检查。只有收益明确时才读取相关内容；同一任务不重复读，已有项目规则足够时不再叠加通用模板。使用前说明用途，不能靠“使用过 skill”代替结果证据。
+
+### 保留为按需参考的工程 skill
+
+| Skill | 何时有价值 | 项目采用与简化 |
+|---|---|---|
+| `spec-driven-development` | 新阶段、算法或需求边界不清 | 保留目的、范围、输入输出、数值/错误/裁剪和验收；可直接写简洁规格，不强制访谈、全套模板或重复审批 |
+| `planning-and-task-breakdown` | 依赖复杂、跨模块、跨多轮实施 | 维护 `tasks/plan.md` 与 `tasks/todo.md`，小步可验证；不机械限制每步文件数，不为单步工作建长计划 |
+| `api-and-interface-design` | 公开接口、图像类型、所有权或错误语义改变 | 明确契约和兼容性，按真实需求设计，不预造接口层 |
+| `source-driven-development` | 版本相关 API、不确定算法细节、外部格式或标准 | 使用精确版本官方资料/原始论文；已有有效证据可复用，变化或疑点才重查，不为纯文档改动全网检索 |
+| `documentation-and-adrs` | 难以回退的依赖、表示、顺序或接口选择 | 中文 ADR 记录原因、备选、后果、状态和日期；沿用编号，决策改变用新记录替代，不删除旧 ADR；小修订直接更新相应文档 |
+| `incremental-implementation` | 多模块行为改动 | 保持小步、可构建、可回归；不强制一任务一提交，不夹带无关清理 |
+| `test-driven-development` | 缺陷复现或新算法先定义期望能明显降低风险 | 缺陷先建立稳定复现，新行为必须验证；不把红绿顺序作为所有任务的仪式，不给纯文字修改添加代码测试 |
+| `property-based-testing` | 大输入域且有有价值数学性质 | 优先确定性生成；与已知参考向量、真实视觉并用，不为工具而加新测试依赖 |
+| `debugging-and-error-recovery` | 非预期构建、测试或运行结果 | 保存证据、定位根因、最小复现、相关回归；能直接解释修复的简单错误不扩成完整事故流程，不屏蔽测试或放宽容差蒙混通过 |
+| `code-review-and-quality` | 重要行为改动或发布前审查容易遗漏事项 | 审查测试、数值、状态、裁剪、布局、所有权、性能等实际风险；常规审查可自行完成，不默认调用多 Agent，不虚称独立审查 |
+| `git-workflow-and-versioning` | 分支复杂、冲突、混合修改或发布步骤 | 保护既有修改、审查差异、集中提交；不额外强制工作区/PR/分支仪式，提交和发布仍需实际授权 |
+| `code-simplification` | 复杂度已妨碍理解和维护 | 限于当前范围且保持行为，先说明收益；不例行追加清理 |
+| `deprecation-and-migration` | 正式替代已有接口、数据或路径 | 记录兼容和迁移影响；用户暂不采用某算子不自动授权删除代码 |
+| `performance-optimization` | 已测量瓶颈或明确响应目标 | 先固定输入、测量、验证正确性；不凭直觉优化 |
+| `observability-and-instrumentation` | 实际需要定位性能或运行状态 | 添加最少必要指标和日志；不为本地库强加生产监控体系 |
+| `ci-cd-and-automation` | 真正修改构建/CI/自动化 | 按当前平台和目标设置检查；只读取 CI 结果不必加载整套流程 |
+| `shipping-and-launch` | 真正发布产品、安装包或服务 | 按交付范围检查发布与恢复；普通文档提交不用生产发布清单 |
+| `security-and-hardening` | 新的不可信输入、外部依赖或安全边界 | 按威胁和实际代码面审查；不扩大成无关合规检查 |
+| `jupyter-notebook` | 需要运行推导、图表或交互实验作为学习证据 | 可用脚手架，中文笔记仅放 `learning/experiments/`；完成须运行验证，不强制每节课建 notebook，产品算法仍为 C++ |
+
+### 保留为专项工具入口
+
+| Skill | 使用条件及限制 |
+|---|---|
+| `differential-review` | 安全敏感差异涉及解析、内存、依赖或校验时按需使用；不作为一般文档/数值修改门槛 |
+| `c-review` | 明确开展 C/C++ 内存、边界、整数或并发安全审计时使用；先明确范围、威胁及所需审计方式；部分覆盖不称完整审计 |
+| `semgrep` | 用户明确要求静态/安全扫描时说明规则范围再执行，禁遥测 `--metrics=off`；不默认多 Agent 或每提交扫描 |
+| `github:github` | 若可用且比现有工具更适合当前 GitHub 操作才选用；可直接用连接器或 `gh` |
+| `github:gh-fix-ci` | CI 失败且其诊断流程有帮助；不必为一条明确日志加载整套流程 |
+| `github:gh-address-comments` | 处理实际 PR 讨论时按需选用；不自动制造审查消息 |
+| `github:yeet` | 用户明确要求对应发布流程、且该 skill 可用才使用；发布授权不来自 skill 名称 |
+| 文档/PDF/表格/演示工具类 skill | 只有相应格式交付物进入任务时使用其可靠脚本或工具协议，不为 Markdown 调用 Office 工作流 |
+| 框架、浏览器、界面、图像生成、站点等专项 skill | 只有已确认范围包含相应技术/交付物时再评估；不因可用就引入 Web、React、Vercel 或素材生成 |
+
+### 不再作为项目常规要求
+
+- `using-agent-skills`：取消每次启动必读和关键词触发式路由，直接按本节判断。
+
+- `context-engineering`：取消每次任务启动必读；仅在交接混乱、规则膨胀或上下文丢失时选取有用方法，不要求固定压缩比例或重复背景汇报。
+
+- `constraint-driven-development`：已有质量约束足够，不强制再建约束文件或做阈值访谈；确有未定义标准时直接在当前规格补充。
+
+- `interview-me`、`idea-refine`：不把已有清晰要求重新访谈；只在用户要求探索或实质歧义无法由上下文解决时选择使用。
+
+- `doubt-driven-development`：取消每个非简单决定都做新上下文、多模型或多 Agent 对抗审查；只有实际风险或用户请求值得承担成本时才考虑，不能自行扩大并行工作授权。
+
+Skill 的模板、固定顺序、模型建议或检查单只是选用方法，不能改变用户指定的模型、任务边界、消息限制、阶段确认和发布权限。保留有效结果要求，去掉不带来证据的重复步骤；如有更高优先级的具体工具/skill 指令，按其执行并说明实质影响。
+
+## 6. C++、算法与依赖
+
+- 使用 C++17，除非已确认的规格明确改变。核心库独立于 UI 框架。
+
+- 初始实现优先显式所有权、标准容器和清晰标量代码；SIMD/OpenMP/Metal 仅在实测与授权支持时加入。
+
+- API 边界显式记录格式、CFA、位深、颜色与传递状态、数值范围、单位、行布局及错误处理。防止隐式色彩转换、裁剪、未检查整数运算和无意义拷贝。
+
+- 添加依赖前检查现有能力是否足够，再评价维护、许可证、平台、构建和安全成本；新依赖须在阶段设计中说明并确认。
+
+- 数值算法明确公式、前提、容差及参考来源；技术结论优先官方文档、标准和原始论文，无法核实则标明。
+
+## 7. 验证与完成标准
+
+按当前规格使用适当验证。CMake 基本命令为：
 
 ```sh
 cmake -S . -B build
@@ -394,100 +142,30 @@ cmake --build build
 ctest --test-dir build --output-on-failure
 ```
 
-A task is complete only when all applicable items are true:
+- 行为改动须有适当测试；缺陷须有回归保护。覆盖有效和非法输入、边界、奇小尺寸、stride、CFA、NaN/Inf、溢出及所有权中与本次改动相关的风险。
 
-只有满足所有适用条件，任务才算完成：
+- 算法使用已知参考值、合理容差及必要性质验证；视觉好看不能替代数值证据。真实样张需要对应授权，粗略缩略图检查不冒充全尺寸或标定色准。
 
-- acceptance criteria are met and the active specification reflects decisions
-- new behavior has tests; bug fixes have a regression test
-- relevant targeted tests and the full available suite pass
-- the project builds from the documented command
-- numeric tolerances and visual checks are documented where applicable
-- no performance claim is made without a repeatable measurement
-- code review has no unresolved critical or required findings
-- public documentation is bilingual and local learning notes remain Chinese
-- `git status` contains no accidental private files, outputs, or unrelated edits
-- the final report states exactly what was verified and what could not be run
+- 代码改动完成相关定向及当前全套检查；文档改动检查差异、链接、证据与语言一致性，不无理由重复没有变化的编译/测试。
 
-- 验收条件已满足，当前规格已反映实际决策
-- 新行为有测试，缺陷修复有回归测试
-- 相关定向测试和当前可用的完整测试套件均通过
-- 项目能够使用文档中的命令构建
-- 适用时已记录数值容差和视觉检查
-- 没有可复现测量就不作性能结论
-- 代码审查不存在未解决的严重或必须修改问题
-- 公开文档保持中英双语，本地学习笔记保持中文
-- `git status` 中没有意外的私有文件、输出或无关修改
-- 最终说明准确列出已验证内容和无法执行的检查
+- 性能结论必须有可复现测量。未跑的检查、历史证据、延期项和当前通过项分开记录。
 
-## 8. Git Safety / Git 安全
+- 审查无未解决必改问题，规格与实际决定一致，Git 中没有意外私人材料或无关修改；最终说明验证范围和限制。
 
-- Never discard or overwrite changes that predate the current task.
-- Do not use destructive git commands without explicit user approval.
-- Inspect the diff before staging. Keep generated files and private material
-  out of commits.
-- Use focused, imperative commit messages that describe the result and reason.
-- Do not push, create releases, change repository visibility, or rewrite
-  history unless the user explicitly requests it.
+## 8. Git 与发布
 
-- 不得丢弃或覆盖当前任务开始前已经存在的修改。
-- 未经用户明确同意，不使用破坏性 git 命令。
-- 暂存前检查 diff，确保生成文件和私有材料不进入 commit。
-- commit 信息应聚焦、使用祈使语气，并说明结果和原因。
-- 除非用户明确要求，否则不 push、不创建 release、不修改仓库可见性，也不改写历史。
+- 不丢弃、不覆盖既有改动。破坏性 Git 操作须明确授权。
 
-## 9. Stage Confirmation and Backup Gates / 阶段确认与备份关口
+- 暂存前审查差异和公开边界；提交信息聚焦结果及原因。
 
-Effective / 生效：2026-09-26, explicit user requirement / 用户明确要求。
+- 只在用户或当前任务明确授权时 commit、push、创建 PR、合并或发布；不改可见性或重写历史。
 
-Before each independent stage (including preparation/design stages), present a
-stage briefing and wait for explicit user confirmation before beginning its learning.
-A roadmap entry, prior-stage approval or available algorithm is not stage approval.
-每个独立阶段（包括准备/设计阶段）开始前，必须汇报阶段细节，并在用户明确确认后
-才开始该阶段学习。路线条目、前阶段授权或现成算法都不等于本阶段确认。
+- 本轮规则、语言和 skill 修订留在 P8 工作区，待 P8 结束与其结果一起提交、进入阶段备份；本轮不单独提交、不额外做一次备份。
 
-The briefing must explain each proposed item separately: target user/scenario,
-problem and purpose, expected observable result, why it belongs in this stage,
-input/output and pipeline position, proposed method and alternatives, limitations,
-acceptance evidence, dependencies, and exact inclusions/exclusions. Do not substitute
-an implementation name or formula for its purpose. Distinguish confirmed requirements
-from proposals and unresolved choices.
-汇报必须逐项说明目标用户/场景、要解决的问题与目的、预期可观察效果、为何本阶段
-需要它、输入输出与流水线位置、拟用方法与备选、限制、验收证据、依赖及做/不做边界。
-不能用方法名称或公式代替目的，区分已确认要求、建议及未决选择。
+## 9. 阶段备份
 
-List the concrete learning topics, prerequisites, explanatory examples/exercises,
-and the decisions each topic enables. After scope/learning-plan confirmation,
-teach and verify understanding. Decisions requiring that learning remain explicitly
-pending; afterward explain alternatives and effects and obtain user confirmation
-before implementing dependent work. Learning approval is not formula/API/UI/dependency
-or implementation approval. If scope changes, update the affected briefing and
-confirm it again; do not silently add an algorithm to satisfy a stage label.
-列出具体学习主题、前置知识、讲解例子/练习，以及每项知识支持什么决策。阶段范围与
-学习计划确认后才教学及核验。依赖学习的决定必须标记待定，学习后解释备选与影响，
-经用户确认后才实施相关工作。学习确认不等于公式/API/界面/依赖或实施确认。范围变化
-须更新相关汇报并再次确认，不得为凑阶段名称静默加入算法。
-
-At every stage closeout, create an independent backup on the agreed external
-medium. Include Git history, current committed/uncommitted files, local ignored
-rules and learning, and necessary original/validation evidence within the authorized
-scope. Inventory all worktrees and the shared Git directory: a worktree's .git pointer
-alone cannot restore its history. List exclusions and never override private-source
-copy restrictions without explicit authorization.
-每阶段结束时在约定外部介质完成独立备份，按授权范围覆盖 Git 历史、当前已提交/未提交
-文件、本地忽略规则和学习、必要原始/验收证据。清点所有工作区与共享 Git 目录，只有
-worktree 的 .git 指针无法恢复历史。明确排除项，不得未经明确授权绕过私人源文件复制限制。
-
-Use unique dated snapshots without overwriting earlier backups. Record source
-paths/revisions, file inventory, SHA-256 hashes and archive hash; restore into a
-temporary directory and compare restored files against the manifest. Check source
-stability and Git recoverability. Store a local ignored receipt and a receipt next
-to the external archive. A successful copy, clean git status, GitHub push or in-project
-snapshot is not independent backup verification. If media/scope/verification is
-blocked, report it and leave backup/stage closure pending. No automatic deletion,
-formatting, upload or Git publication is authorized by this rule.
-使用带时间且不覆盖旧备份的快照，记录源路径/版本、文件清单、SHA-256 和归档哈希；
-恢复到临时目录逐文件核对，检查源稳定性和 Git 可恢复性。外部归档旁及本地忽略目录
-各留凭据。复制成功、git 干净、推送 GitHub 或项目内快照均不等于独立备份验证。
-介质/范围/校验受阻须明确报告，保持备份及阶段关闭待完成。本规则不授权自动删除、
-格式化、上传或 Git 发布。Detailed protocol / 具体流程：docs/stage-gates-and-backup.md。
+- 按 `docs/stage-gates-and-backup.md` 的2026-09-28修订2执行：必要材料完整清单、SHA-256内容去重、精确排除可重建中间产物；新文件默认纳入，原件/关键证据/学习/Git保留。
+- 默认只做分层内容核验，不每次完整恢复；新工具/重要变更或介质疑问按需抽样，灾难恢复、重大迁移或用户明确要求才完整恢复。凭据区分content_verified、sample_restore_verified和restore_verified。
+- 核验真实挂载、单写入锁及源稳定；新/中断对象核验内容，有有效历史凭据的对象检查清单与存在性后复用。保留全部历史恢复点、对象及中断文件，不自动删除或回收。
+- 主目录和工作区分别保存，不覆盖源资料或跟随链接到其他项目。授权介质为SGXZPAN，可含本项目私人RAW，不允许公开上传；外盘保留独立恢复工具。
+- 集中在用户要求、原件接收或阶段收尾执行，先整理并提交再备份，必要补充只做去重更新。旧全量恢复要求由本修订替代，未完成备份不能追记为通过。
