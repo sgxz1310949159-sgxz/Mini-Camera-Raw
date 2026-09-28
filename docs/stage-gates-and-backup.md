@@ -1,66 +1,57 @@
-# Stage gates and backup / 阶段关口与备份
+# 阶段关口与备份
 
-Status / 状态：User-required workflow, effective 2026-09-26 / 用户要求的流程，自该日起生效。
+状态：用户要求的流程，自 2026-09-26 起生效。
 
-## Stage briefing template / 阶段汇报模板
+## 阶段汇报模板
 
-Before learning, supply the following and wait for explicit confirmation:
 开始学习前提供以下内容，等待明确确认：
 
-1. Stage objective, prior verified baseline, scope and exclusions / 阶段目标、前序已验基线、范围及排除项。
-2. For every item: who needs it, in which scene, what problem it solves, desired
-   image/interaction result, and why simpler alternatives are insufficient /
-   逐项解释谁在什么场景需要、解决什么问题、期望图像/交互效果及更简单方案为何不足。
-3. Proposed data flow, methods/options, costs and known limits; do not present
-   unchosen options as agreed implementation / 拟议数据流、方法/备选、代价和已知限制，不把未选方案写成已定实现。
-4. Specific learning topics and prerequisites; examples/checks and the decisions
-   the learner will be able to make afterward / 具体学习内容与前置知识、例子/核验、学习后能够作出的决定。
-5. Acceptance cases: numeric, visual, interaction/performance where applicable;
-   distinguish automated evidence from user observation / 数值、视觉及适用的交互/性能案例，区分自动检查与用户观察。
-6. Decision table: confirmed now, pending learning, and pending external evidence;
-   each pending item has an explicit later confirmation point / 决策表区分当前已定、待学习、待外部证据，未决项均有后续明确确认点。
+1. 阶段目标、前序已验基线、范围及排除项。
 
-Flow / 流程：briefing → user confirms scope/learning → learning and verification →
-post-learning choices confirmed → implementation → acceptance → verified backup →
-stage closeout / 详细汇报→用户确认范围与学习→学习核验→学习后决策确认→实施→验收→
-备份验证→阶段收尾。Do not begin the next stage automatically / 不自动启动下一阶段。
+2. 逐项解释谁在什么场景需要、解决什么问题、期望图像/交互效果及更简单方案为何不足。
 
-The user provisionally accepted the P8–P13 order on 2026-09-26; each stage still independently follows these gates. Current
-P6 shoulder remains provisionally outside the formal photo path; no code deletion
-or rerouting follows merely from documenting this decision.
+3. 拟议数据流、方法/备选、代价和已知限制，不把未选方案写成已定实现。
+
+4. 具体学习内容与前置知识、例子/核验、学习后能够作出的决定。
+
+5. 数值、视觉及适用的交互/性能案例，区分自动检查与用户观察。
+
+6. 决策表区分当前已定、待学习、待外部证据，未决项均有后续明确确认点。
+
+流程：详细汇报→用户确认范围与学习→学习核验→学习后决策确认→实施→验收→
+备份验证→阶段收尾。
+不自动启动下一阶段。
+
 用户于 2026-09-26 暂定采用 P8–P13 顺序，各阶段仍独立遵守这些关口。P6 当前肩部暂不进入正式照片路径，
 记录决定本身不代表已删除或改接代码。
 
-## Backup procedure / 备份流程
+## 备份流程（2026-09-28 去重修订）
 
-Adapt the verified FirstLight procedure: external timestamped archive, SHA-256
-manifest, actual temporary restore and per-file comparison. Its private storage
-paths belong only in local receipts, not public documents.
-参照 FirstLight 已验证流程：外部时间戳归档、SHA-256 清单、实际临时恢复及逐文件核对。
-私人存储路径只进本地凭据，不进公开文档。
+用户要求按 FirstLight Camera 当前《备份与恢复规则》修订1改用逻辑全量、文件内容寻址去重；本节替代每阶段生成全量tar及逐级增量包恢复的旧惯例。
 
-- Inventory main checkout, shared Git history and independent worktrees; include
-  current edits and ignored learning/evidence. Preserve source trees read-only.
-  清点主目录、共享 Git 历史与独立工作区，覆盖当前修改及忽略学习/证据；源目录只读。
-- Confirm medium and scope, especially privately restricted originals. A RAW
-  exclusion means the backup cannot restore those originals; say so explicitly.
-  确认介质和范围，尤其有复制限制的私人原片；排除 RAW 就不能恢复原片，须明确声明。
-- Use a unique directory; never overwrite existing archives. Preserve symlinks
-  as links rather than silently following them into unrelated data.
-  新建唯一目录，不覆盖既有归档；符号链接按链接保存，不静默跟随到无关数据。
-- Hash files, archive, restore, compare every included file and symlink, and
-  recheck source hashes for changes during the run. Verify Git history can be
-  restored independently rather than relying on old absolute .git pointers.
-  文件哈希、归档、恢复、逐文件/链接比较，并复核备份期间源哈希未变；验证 Git 历史
-  可独立恢复，不依赖原机器绝对 .git 指针。
-- Record file counts, bytes, exclusions, source revisions, archive SHA-256,
-  restore/Git result and time in local and external receipts. Keep previous backups.
-  本地和外部凭据记录数量、容量、排除项、源版本、归档哈希、恢复/Git 结果及时间，保留旧备份。
+### 范围与存储
 
-Trigger: initial backup now; every independent stage after final records are saved,
-before closure. If stage material changes afterward, make another verified snapshot.
-Receipt written after archival describes that snapshot; it need not recursively
-include itself. Backup failure is an open closeout item, not permission to skip it.
-触发：当前首次备份；以后每个独立阶段最终记录保存后、关闭前备份。之后阶段材料若
-变化，需再做验证快照。归档后凭据描述该快照，无需递归包含自身。备份失败保持收尾
-缺项，不构成跳过许可。No recurring timer or automatic publication is implied / 不推定定时任务或自动发布。
+- 每阶段关闭前建立完整清单快照，保存主目录、共享Git及各独立工作区的已提交/未提交文件、隐藏文件、忽略学习资料、私人RAW及证据。嵌套工作区已被父目录覆盖时不重复遍历；多个根分别编号，不覆盖旧主目录来拼装资料。
+- 普通文件按原始字节SHA-256存入项目独立存储库的 `objects/前两位/完整哈希.gz`；同内容不同名称、目录、工作区和恢复点共享对象。快照记录路径、大小、哈希、权限和修改时间，另存目录及符号链接目标。
+- 文件级精确去重不按照片相似度、不删除原片、不混同RAW/JPEG；改变部分内容的大文件会增加一个完整新对象，不宣称分块去重或零重复字节。
+- 默认不排除构建及本地材料；唯一派生凭据排除为本次备份控制目录的 `latest-verification.json`，避免自引用。运行日志写到源目录之外。完整Git bundle作为独立恢复入口，同时保留原Git数据；工作区绝对.git指针本身不是独立恢复证明。
+- 不跟随符号链接到项目外；socket/设备等特殊文件或源变化导致失败，不悄悄遗漏。备份盘真实挂载、空间和根范围先核查。
+
+### 写入、验证与恢复
+
+- 每个存储库只允许一个写入者；独占锁不绕过，失效锁须核实原任务已停止后处理。对象用临时文件、fsync及同盘原子替换，已有对象解压核对内容。
+- 发布前实际恢复到新的本机临时目录，逐文件读取验证SHA-256和大小，核对目录及链接；恢复文件为独立副本，不硬链接共享对象。拒绝路径穿越、非目录父路径与覆盖现有目标。
+- 由恢复出的Git bundle在无原仓库依赖的目录克隆，运行完整性检查并核对阶段提交；原始工作区及忽略内容通过清单根映射恢复。
+- 写入前后盘点源，确认路径/类型/大小/修改时间/权限等稳定；快照清单及其SHA凭据在验证通过后原子发布，使用唯一不可覆盖名称。
+- 每个快照直接引用完整所需对象，无需前一快照或旧tar参与恢复。必须保留整个存储库，只有清单不能恢复。独立恢复脚本和规则副本也保存在外盘。
+- 本地及外盘凭据记录源范围、版本、排除项、文件数、逻辑字节、唯一对象/新增对象和压缩字节、清单SHA、源稳定、实际恢复及Git验证结果。
+
+### 历史、边界与关闭
+
+- 永久保留已验证恢复点，不自动淘汰、不回收共享对象、不删除中断留下的对象。共享对象损坏可能影响多个恢复点，不能省略实际恢复验证。
+- 本次只为新快照启用去重；已有全量/增量归档及清单保留原样，不执行FirstLight历史迁移中的删除步骤。如另行迁移历史，须逐一还原历史完整状态、验证全部新恢复点、保存映射并另获删除授权。
+- 保留文件/目录权限与修改时间、链接目标；不承诺UID、ACL、扩展属性或创建时间。SHA是完整性检查，不是加密或防恶意篡改认证；同一外盘的一份备份不等于异地冗余。
+- 用户已授权的外盘及私人RAW范围保持有效；精确机器路径只进本地/外盘凭据，不进公开记录。不格式化、不清理源、不修改仓库可见性。
+- 阶段最终记录保存并提交后备份；此后收尾记录发生变化，再建共享对象的新完整清单。凭据不递归备份自身。备份失败保持阶段未关闭，不自动启动下一阶段。
+
+本轮语言、消息、模型及skill修订与P8契约一并提交和备份；本次用户已通过P8整体设计验收并授权本地提交及按新规则备份。远端发布另需明确授权。
