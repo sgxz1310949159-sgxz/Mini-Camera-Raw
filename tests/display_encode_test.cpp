@@ -33,6 +33,19 @@ TEST(DisplayEncodeTest, ClipsOnlyOutputAndUsesSrgbInsteadOfPowerGamma) {
   EXPECT_EQ(out.metadata().transfer_function, TransferFunction::kSrgb);
   EXPECT_THROW(static_cast<void>(encode_srgb16(out)), std::invalid_argument);
 }
+TEST(DisplayEncodeTest, EndpointFastPathsMatchOriginalScalarFormulaExactly) {
+  auto in=ImageBuffer::create(working(1024,1,3072));
+  for(std::size_t i=0;i<3072;++i) in.float_data()[i]=float(double(i)/1024.-1.);
+  in.float_data()[0]=std::nextafter(1.f,0.f);
+  in.float_data()[1]=std::nextafter(1.f,2.f);
+  in.float_data()[2]=std::nextafter(0.f,-1.f);
+  auto out=encode_srgb16(in);
+  for(std::size_t i=0;i<3072;++i) {
+    const double v=std::max(0.,std::min(1.,double(in.float_data()[i])));
+    const double s=v<=.0031308?12.92*v:1.055*std::pow(v,1./2.4)-.055;
+    EXPECT_EQ(out.uint16_data()[i],static_cast<unsigned>(std::floor(s*65535+.5)));
+  }
+}
 TEST(DisplayEncodeTest, InverseGeneratedRampMonotonicityAndPadding) {
   auto in = ImageBuffer::create(working(257, 3, 257 * 3 + 1));
   for (std::size_t y = 0; y < 3; ++y) {

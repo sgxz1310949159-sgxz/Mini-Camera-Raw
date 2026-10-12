@@ -9,6 +9,8 @@ project(
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+option(MINI_CAMERA_RAW_BUILD_GUI "Build the optional Qt Widgets editor" OFF)
+
 add_subdirectory(src)
 add_subdirectory(apps)
 

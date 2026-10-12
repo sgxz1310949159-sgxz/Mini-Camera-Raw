@@ -17,6 +17,9 @@ struct SensorGeometry {
   std::size_t raw_pitch_bytes;
 };
 
+// Default delivered image rectangle, relative to the active mosaic origin.
+struct ImageCrop { std::size_t left, top, width, height; };
+
 struct SensorMetadata {
   SensorGeometry geometry;
   SensorLevels levels;
@@ -27,6 +30,7 @@ struct SensorMetadata {
   std::optional<std::array<double, 12>> camera_to_srgb;
   std::string libraw_version;
   unsigned unpack_options;
+  std::optional<ImageCrop> default_crop; // no value: retain the complete active area
 };
 
 struct DecodedRaw {

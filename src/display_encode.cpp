@@ -23,7 +23,10 @@ ImageBuffer encode_srgb16(const ImageBuffer& linear) {
     for (std::size_t x = 0; x < metadata.width * 3; ++x) {
       if (!std::isfinite(source[x]))
         throw std::invalid_argument("nonfinite active working sample");
-      const double v = std::clamp(double(source[x]), 0.0, 1.0);
+      // These exact output endpoints need no transfer-function evaluation.
+      if (source[x] <= 0.f) { target[x]=0; continue; }
+      if (source[x] >= 1.f) { target[x]=65535; continue; }
+      const double v = double(source[x]);
       const double encoded =
           v <= 0.0031308 ? 12.92 * v : 1.055 * std::pow(v, 1.0 / 2.4) - 0.055;
       target[x] = static_cast<std::uint16_t>(std::floor(encoded * 65535 + 0.5));

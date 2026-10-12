@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <cstring>
+#include <future>
 #include <limits>
 #include <stdexcept>
 #include <vector>
@@ -108,6 +109,20 @@ TEST_F(RawDecoderTest, AllCfaUseVisiblePhaseWithoutDoubleMarginShift) {
   }
 }
 
+TEST_F(RawDecoderTest, DefaultCropIsRelativeToActiveOriginAndValidated) {
+  decoder.imgdata.sizes.raw_inset_crops[0]={2,2,2,2};
+  const auto result=detail::copy_libraw_result(decoder);
+  ASSERT_TRUE(result.sensor.default_crop);
+  EXPECT_EQ(result.sensor.default_crop->left,1U); EXPECT_EQ(result.sensor.default_crop->top,1U);
+  EXPECT_EQ(result.sensor.default_crop->width,2U); EXPECT_EQ(result.sensor.default_crop->height,2U);
+  EXPECT_EQ(result.image.metadata().width,3U);
+  for(auto crop : {libraw_raw_inset_crop_t{0,2,2,2}, {2,0,2,2}, {2,2,3,2}, {2,2,2,3}, {2,2,0,2}, {65535,65535,2,2}}) {
+    decoder.imgdata.sizes.raw_inset_crops[0]=crop;
+    EXPECT_THROW(detail::copy_libraw_result(decoder),std::invalid_argument);
+  }
+  decoder.imgdata.sizes.raw_inset_crops[0]={65535,65535,0,0};
+  EXPECT_FALSE(detail::copy_libraw_result(decoder).sensor.default_crop);
+}
 TEST_F(RawDecoderTest, MissingOptionalMetadataStaysAbsent) {
   std::memset(decoder.imgdata.color.cam_mul, 0, sizeof(decoder.imgdata.color.cam_mul));
   std::memset(decoder.imgdata.color.rgb_cam, 0, sizeof(decoder.imgdata.color.rgb_cam));
@@ -238,6 +253,13 @@ TEST(RawFileTest, LibRawSyntheticUnpackResultSurvivesDecoderDestruction) {
   EXPECT_EQ(CfaPattern::kRggb, result.image.metadata().cfa_pattern);
   const auto linear = normalize(result.image, result.sensor.levels);
   EXPECT_NEAR(319.0 / 65535, linear.float_at(7, 7, 0), 1e-6);
+}
+
+TEST(RawFileTest, BackgroundThreadReportsMissingFileWithoutStackOverflow) {
+  auto result = std::async(std::launch::async, [] {
+    return decode_raw("/nonexistent-mini-camera-raw-p9/input.ARW");
+  });
+  EXPECT_THROW(static_cast<void>(result.get()), std::runtime_error);
 }
 
 TEST(RawFileTest, RejectsEmptyEmbeddedNullAndMissingPath) {
