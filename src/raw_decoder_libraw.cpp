@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <memory>
 #include <stdexcept>
 #include <utility>
 
@@ -124,6 +125,16 @@ DecodedRaw copy_libraw_result(LibRaw& decoder) {
   sensor.geometry = {s.raw_width, s.raw_height, s.left_margin, s.top_margin,
                       s.width, s.height, s.raw_pitch};
   const auto count = validate_geometry(sensor.geometry);
+  const auto& crop=s.raw_inset_crops[0];
+  if(crop.cwidth || crop.cheight) {
+    if(!crop.cwidth || !crop.cheight || crop.cleft==65535 || crop.ctop==65535 ||
+       crop.cleft<s.left_margin || crop.ctop<s.top_margin)
+      throw std::invalid_argument("invalid default RAW crop origin or size");
+    const std::size_t left=crop.cleft-s.left_margin, top=crop.ctop-s.top_margin;
+    if(left>s.width || top>s.height || crop.cwidth>s.width-left || crop.cheight>s.height-top)
+      throw std::invalid_argument("default RAW crop exceeds active area");
+    sensor.default_crop=ImageCrop{left,top,crop.cwidth,crop.cheight};
+  }
   for (std::size_t p = 0; p < 4; ++p) {
     // Convert before addition, avoiding unsigned overflow in malformed metadata.
     sensor.levels.black[p] = static_cast<double>(d.color.black) + d.color.cblack[indices[p]];
@@ -162,7 +173,9 @@ DecodedRaw copy_libraw_result(LibRaw& decoder) {
 DecodedRaw decode_raw(const std::string& path) {
   if (path.empty() || path.find('\0') != std::string::npos)
     throw std::invalid_argument("RAW path must be nonempty and contain no NUL");
-  LibRaw decoder;
+  // LibRaw exceeds some platform worker-thread stacks; keep RAII ownership on the heap.
+  auto owner = std::make_unique<LibRaw>();
+  auto& decoder = *owner;
   decoder.set_dataerror_handler(quiet_data_error, nullptr);
   decoder.imgdata.rawparams.use_rawspeed = 0;
   decoder.imgdata.rawparams.shot_select = 0;

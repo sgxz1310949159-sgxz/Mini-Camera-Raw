@@ -6,7 +6,7 @@
 namespace mini_camera_raw {
 DecodedRaw decode_raw(const std::string& path) {
   if (path != "synthetic" && path != "saturated" && path != "missing-wb" &&
-      path != "missing-matrix")
+      path != "missing-matrix" && path != "synthetic-portrait")
     throw std::runtime_error("synthetic decoder rejected input");
   ImageMetadata m{3,
                   3,
@@ -16,7 +16,9 @@ DecodedRaw decode_raw(const std::string& path) {
                   CfaPattern::kRggb,
                   ColorState::kRawBayer,
                   {0, 4096, false}};
+  if(path == "synthetic-portrait") { m.width=4; m.row_stride_elements=4; }
   SensorMetadata sensor{};
+  if(path == "synthetic-portrait") sensor.orientation=6;
   sensor.levels = {{0, 0, 0, 0}, {4096, 4096, 4096, 4096}};
   if (path != "missing-wb")
     sensor.camera_wb_tile = std::array<double, 4>{2, 1, 1, 1.5};
@@ -25,7 +27,7 @@ DecodedRaw decode_raw(const std::string& path) {
         std::array<double, 12>{1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0};
   return {
       ImageBuffer::from_uint16(
-          m, ImageBuffer::UInt16Storage(9, path == "saturated" ? 4096 : 1024)),
+          m, ImageBuffer::UInt16Storage(m.width*m.height, path == "saturated" ? 4096 : 1024)),
       sensor};
 }
 }  // namespace mini_camera_raw
